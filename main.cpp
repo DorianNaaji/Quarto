@@ -3,6 +3,7 @@
 
 int main() {
     Jeu j;
-
+    Jeu test;
     j.readListePion();
+
 }
