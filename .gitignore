@@ -2,12 +2,10 @@
 .idea/
 # build
 cmake-build-debug/
-<<<<<<< HEAD
 lib/
+# modules
 cmake_modules/
-=======
 # CMake
 CMakeLists.txt
 # Librairies
 libs/
->>>>>>> 4429a75cc3e75132d86f74621baabc8565515e40
