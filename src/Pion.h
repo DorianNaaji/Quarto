@@ -14,8 +14,6 @@ private:
     bool couleur;
     bool trou;
 
-
-
 public:
 
     Pion();
