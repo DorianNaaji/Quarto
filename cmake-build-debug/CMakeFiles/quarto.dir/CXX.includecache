@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Case.h
+Pion.h
+/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Pion.h
+
+/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Grille.h
+Case.h
+/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Case.h
+
+/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Jeu.cpp
+Jeu.h
+/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Jeu.h
+math.h
+-
+iostream
+-
+
+/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Jeu.h
+vector
+-
+Grille.h
+/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Grille.h
+
+/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Pion.h
+string
+-
+
