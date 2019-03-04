@@ -1,8 +1,8 @@
-# Install script for directory: /Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto
+# Install script for directory: C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/usr/local")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/quarto")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

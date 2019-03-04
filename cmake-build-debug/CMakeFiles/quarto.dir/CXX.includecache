@@ -6,29 +6,53 @@
 
 #IncludeRegexTransform: 
 
-/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Case.h
-Pion.h
-/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Pion.h
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/main.cpp
+iostream
+-
+src/Jeu.h
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Jeu.h
 
-/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Grille.h
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Case.cpp
 Case.h
-/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Case.h
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Case.h
 
-/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Jeu.cpp
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Case.h
+Pion.h
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Pion.h
+
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Grille.cpp
+iostream
+-
+Grille.h
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Grille.h
+assert.h
+-
+
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Grille.h
+Case.h
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Case.h
+
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Jeu.cpp
 Jeu.h
-/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Jeu.h
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Jeu.h
 math.h
 -
 iostream
 -
 
-/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Jeu.h
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Jeu.h
 vector
 -
 Grille.h
-/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Grille.h
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Grille.h
 
-/Users/nathan/Documents/Polytech/3A/S6/algo-cpx/TP/quarto/src/Pion.h
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Pion.cpp
+iostream
+-
+Pion.h
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Pion.h
+
+C:/Users/Dorian/Desktop/POLYTECH 2018-2021/S6/Algo et Complexite/Projets/quarto/src/Pion.h
 string
 -
 

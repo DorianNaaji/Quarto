@@ -1,11 +1,13 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/quarto.dir/main.cpp.o"
-  "CMakeFiles/quarto.dir/src/Pion.cpp.o"
-  "CMakeFiles/quarto.dir/src/Grille.cpp.o"
-  "CMakeFiles/quarto.dir/src/Case.cpp.o"
-  "CMakeFiles/quarto.dir/src/Jeu.cpp.o"
+  "CMakeFiles/quarto.dir/main.cpp.obj"
+  "CMakeFiles/quarto.dir/src/Pion.cpp.obj"
+  "CMakeFiles/quarto.dir/src/Grille.cpp.obj"
+  "CMakeFiles/quarto.dir/src/Case.cpp.obj"
+  "CMakeFiles/quarto.dir/src/Jeu.cpp.obj"
   "quarto.pdb"
-  "quarto"
+  "quarto.exe"
+  "quarto.exe.manifest"
+  "libquarto.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.
