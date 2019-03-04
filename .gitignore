@@ -1,2 +1,8 @@
+# répertoire CLion
 .idea/
+# build
 cmake-build-debug/
+# CMake
+CMakeLists.txt
+# Librairies
+libs/
