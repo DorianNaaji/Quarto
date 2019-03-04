@@ -14,12 +14,22 @@ int main() {
     for (int i = 0; i < 16; ++i) {
         sf::RectangleShape rect(sf::Vector2f(150.f, 150.f));
         rect.setPosition(20+155*(i%4), 20+155*(i/4));
-        rect.setFillColor(sf::Color::Transparent);
         rect.setOutlineThickness(5.f);
         rect.setOutlineColor(sf::Color::Black);
 
         grille.push_back(rect);
     }
+
+
+    sf::Texture texture;
+    if (!texture.loadFromFile("../images/grand-cercle-rouge-plein.png", sf::IntRect(0, 0, 400, 400)))
+    {
+        return -1;
+    }
+
+    texture.setSmooth(true);
+
+    grille[0].setTexture(&texture);
 
     std::vector<sf::RectangleShape> openGrille;
 
@@ -30,7 +40,7 @@ int main() {
         rect.setOutlineThickness(5.f);
         rect.setOutlineColor(sf::Color::Black);
 
-        grille.push_back(rect);
+        openGrille.push_back(rect);
     }
 
 
@@ -53,6 +63,10 @@ int main() {
         // window.draw(...);
 
         for (sf::RectangleShape child : grille) {
+            window.draw(child);
+        }
+
+        for (sf::RectangleShape child : openGrille) {
             window.draw(child);
         }
 
