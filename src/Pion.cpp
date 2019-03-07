@@ -6,13 +6,15 @@ Pion::Pion() {
     this->forme = false;
     this->taille = false;
     this->trou = false;
+    this->lien_image = "";
 }
 
-Pion::Pion(bool f, bool ta, bool c, bool tr) {
+Pion::Pion(bool f, bool ta, bool c, bool tr, std::string str) {
     this->couleur = f;
     this->forme = ta;
     this->taille = c;
     this->trou = tr;
+    this->lien_image = str;
 }
 
 bool Pion::operator==(const Pion &rhs) const {
@@ -31,4 +33,9 @@ bool Pion::operator!=(const Pion &rhs) const {
 
 void Pion::read() {
     std::cout<<couleur<<" | "<<forme<<" | "<<taille<<" | "<<trou<<std::endl;
+    std::cout<<lien_image<<std::endl;
+}
+
+const std::string &Pion::getLien_image() const {
+    return lien_image;
 }

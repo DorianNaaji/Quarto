@@ -14,17 +14,21 @@ private:
     bool couleur;
     bool trou;
 
+    std::string lien_image;
+
 public:
 
     Pion();
 
-    Pion(bool f, bool ta, bool c, bool tr);
+    Pion(bool f, bool ta, bool c, bool tr, std::string str);
 
     bool operator ==(const Pion &rhs) const;
 
     bool operator !=(const Pion &rhs) const;
 
     void read();
+
+    const std::string &getLien_image() const;
 };
 
 

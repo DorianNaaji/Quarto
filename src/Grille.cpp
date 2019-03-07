@@ -25,7 +25,5 @@ Case & Grille::getCase(unsigned int x, unsigned int y) {
 }
 
 void Grille::setCase(unsigned int x, unsigned int y, Pion * p) {
-    assert(x<dimX);
-    assert(y<dimY);
-    grid[y*dimX+x].setPion(p);
+    if (x < dimX && y < dimY) grid[y*dimX+x].setPion(p);
 }

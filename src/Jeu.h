@@ -7,6 +7,7 @@
 
 
 #include <vector>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include "Grille.h"
 
 class Jeu {
@@ -20,7 +21,11 @@ public:
 
     Jeu();
 
-    void readListePion();
+    int selectPion(int mousseX, int mousseY, std::vector<sf::RectangleShape> & og);
+
+    void selectCaseGrille(int mousseX, int mousseY, int & x, int & y);
+
+    void run();
 };
 
 
