@@ -29,6 +29,8 @@ public:
     void read();
 
     const std::string &getLien_image() const;
+
+    bool equals(Pion *pion);
 };
 
 

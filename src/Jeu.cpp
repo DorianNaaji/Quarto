@@ -73,7 +73,7 @@ void Jeu::run() {
     int ind_pion = -1, ind_x = -1, ind_y = -1;
 
     // création de la fenêtre
-    sf::RenderWindow _window(sf::VideoMode(1350, 1100), "Quarto");
+    sf::RenderWindow _window(sf::VideoMode(1350, 1100), "Quarto", sf::Style::Titlebar | sf::Style::Close);
 
     std::vector<sf::RectangleShape> _grille;
 
@@ -136,6 +136,19 @@ void Jeu::run() {
                         ind_pion = -1;
                         ind_x = -1;
                         ind_y = -1;
+
+                        //gestion des conditions de victoire (affichage console uniquement)
+                        bool win = this->g->win(J1);
+                        if(win)
+                        {
+                            std::cout<<"--- J1/J2 Gagne ---"<<std::endl;
+                            // on ferme si c'est gagné (juste du test)
+                            _window.close();
+                        }
+                        else
+                        {
+                            std::cout<<"pas de victoire"<<std::endl;
+                        }
                     }
                     break;
 

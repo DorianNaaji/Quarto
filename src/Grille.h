@@ -24,6 +24,16 @@ public:
     Case & getCase(unsigned int x, unsigned int y);
 
     void setCase(unsigned int x, unsigned int y, Pion * p);
+
+    bool horizontalWin(std::string &joueur);
+
+    bool verticalWin(std::string &joueur);
+
+    bool diagonalWin(std::string &joueur);
+
+    bool reverseDiagonalWin(std::string &joueur);
+
+    bool win(std::string &joueur);
 };
 
 

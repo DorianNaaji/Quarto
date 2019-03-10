@@ -27,3 +27,88 @@ Case & Grille::getCase(unsigned int x, unsigned int y) {
 void Grille::setCase(unsigned int x, unsigned int y, Pion * p) {
     if (x < dimX && y < dimY) grid[y*dimX+x].setPion(p);
 }
+
+
+
+/**
+ *
+ * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
+ * @return bool : gagné (true) ou non (false) à l'horizontale
+ */
+bool Grille::horizontalWin(std::string &joueur)
+{
+    for(int i = 0; i < this->dimY; i++)
+    {
+        //bool monT = this->getCase(0, 0).getPion()->equals(this->getCase(1, 0).getPion());
+
+        if(  this->getCase(0, i).getPion()->equals(this->getCase(1, i).getPion())
+        &&  this->getCase(0, i).getPion()->equals(this->getCase(2, i).getPion())
+        &&  this->getCase(0, i).getPion()->equals(this->getCase(3, i).getPion())
+        /** &&  this->getCase(0, i).getPion() != nullptr*/)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ *
+ * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
+ * @return bool : gagné (true) ou non (false) à la verticale
+ */
+bool Grille::verticalWin(std::string &joueur)
+{
+    for(int i = 0; i < this->dimX; i++)
+    {
+        if( this->getCase(i, 0).getPion()->equals(this->getCase(i, 1).getPion())
+        && this->getCase(i, 0).getPion()->equals(this->getCase(i, 2).getPion())
+        && this->getCase(i, 0).getPion()->equals(this->getCase(i, 3).getPion()))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ *
+ * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
+ * @return bool : gagné (true) ou non (false) avec la diagonale
+ */
+bool Grille::diagonalWin(std::string &joueur)
+{
+    return
+        this->getCase(0, 0).getPion()->equals(this->getCase(1, 1).getPion())
+        && this->getCase(0, 0).getPion()->equals(this->getCase(2, 2).getPion())
+        && this->getCase(0, 0).getPion()->equals(this->getCase(3, 3).getPion());
+}
+
+/**
+ *
+ * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
+ * @return bool : gagné (true) ou non (false) avec la diagonale inverse
+ */
+bool Grille::reverseDiagonalWin(std::string &joueur)
+{
+    return
+        this->getCase(0, 3).getPion()->equals(this->getCase(1, 2).getPion())
+        && this->getCase(0, 3).getPion()->equals(this->getCase(2, 1).getPion())
+        && this->getCase(0, 3).getPion()->equals(this->getCase(3, 0).getPion());
+}
+
+/**
+ *
+ * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
+ * @return bool : gagné (true) ou non (false)
+ */
+bool Grille::win(std::string &joueur)
+{
+    return
+    (
+        (this->horizontalWin(joueur))
+        || (this->verticalWin(joueur))
+        || (this->diagonalWin(joueur))
+        || (this->reverseDiagonalWin(joueur))
+    );
+}
