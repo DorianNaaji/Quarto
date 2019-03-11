@@ -81,19 +81,40 @@ bool Grille::verticalWin(std::string &joueur)
  */
 bool Grille::diagonalWin(std::string &joueur)
 {
-    if (this->getCase(0, 0).getPion()->equals(this->getCase(1, 1).getPion())
-        && this->getCase(0, 0).getPion()->equals(this->getCase(2, 2).getPion())
-        && this->getCase(0, 0).getPion()->equals(this->getCase(3, 3).getPion())) {
+    unsigned int i;
+    unsigned int j;
+    int nbPionsSimilaires = 0;
 
-        joueur = "diag";
-        return true;
+    // va faire des vérifications parfois déjà faites ou dont on pourrait se passer
+    // durant un tour de boucle mais
+    // assure que les 4 pions alignés sur la diagonale ont bien tous des caractéristiques
+    // en commun : Le pion en (0,0) va être comparé à tous les autres & lui-même,
+    // Le pion en (1,1) également, puis celui en (2,2) et en (3,3).
+    // La fonction utilise un compteur @see nbPionsSimilaires qui compte le nombre de pions
+    // alignés et retourne si il est égal à 4 en fin de fonction.
+    for(i = 0, j = 0; j < this->dimX; i++, j++)
+    {
+        std::cout<<"Pions en partant d'en bas à droite : "<<std::endl;
+        std::cout<<"PION 1"<<std::endl;
+        std::cout<<this->getCase(3, 3).getPion()->print() <<std::endl;
+        std::cout<<"PION 2"<<std::endl;
+        std::cout<<this->getCase(2, 2).getPion()->print() <<std::endl;
+        std::cout<<"PION 3"<<std::endl;
+        std::cout<<this->getCase(1, 1).getPion()->print() <<std::endl;
+        std::cout<<"PION 4"<<std::endl;
+        std::cout<<this->getCase(0, 0).getPion()->print() <<std::endl;
+         if
+         (
+                 (this->getCase(i, j).getPion()->equals(this->getCase(0, 0).getPion()))
+                 && (this->getCase(i, j).getPion()->equals(this->getCase(1, 1).getPion()))
+                 && (this->getCase(i, j).getPion()->equals(this->getCase(2, 2).getPion()))
+                 && (this->getCase(i, j).getPion()->equals(this->getCase(3, 3).getPion()))
+         )
+         {
+             nbPionsSimilaires++;
+         }
     }
-
-    return false;
-    /*return
-        this->getCase(0, 0).getPion()->equals(this->getCase(1, 1).getPion())
-        && this->getCase(0, 0).getPion()->equals(this->getCase(2, 2).getPion())
-        && this->getCase(0, 0).getPion()->equals(this->getCase(3, 3).getPion());*/
+    return (nbPionsSimilaires == 4);
 }
 
 /**
@@ -103,20 +124,25 @@ bool Grille::diagonalWin(std::string &joueur)
  */
 bool Grille::reverseDiagonalWin(std::string &joueur)
 {
-    if (this->getCase(0, 3).getPion()->equals(this->getCase(1, 2).getPion())
-        && this->getCase(0, 3).getPion()->equals(this->getCase(2, 1).getPion())
-        && this->getCase(0, 3).getPion()->equals(this->getCase(3, 0).getPion())) {
+    unsigned int i;
+    unsigned int j;
+    int nbPionsSimilaires = 0;
 
-        joueur = "anti-diag";
-        return true;
+    for(i = 0, j = 3; (i < this->dimX) && (j >= 0); i++, j--)
+    {
+
+        if
+        (
+            (this->getCase(i, j).getPion()->equals(this->getCase(0, 3).getPion())
+             && this->getCase(i, j).getPion()->equals(this->getCase(1, 2).getPion())
+             && this->getCase(i, j).getPion()->equals(this->getCase(2, 1).getPion())
+             && this->getCase(i, j).getPion()->equals(this->getCase(3, 0).getPion()))
+        )
+        {
+            nbPionsSimilaires++;
+        }
     }
-
-    return false;
-
-    /*return
-        this->getCase(0, 3).getPion()->equals(this->getCase(1, 2).getPion())
-        && this->getCase(0, 3).getPion()->equals(this->getCase(2, 1).getPion())
-        && this->getCase(0, 3).getPion()->equals(this->getCase(3, 0).getPion());*/
+    return (nbPionsSimilaires == 4);
 }
 
 /**
