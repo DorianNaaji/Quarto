@@ -9,11 +9,11 @@ Pion::Pion() {
     this->lien_image = "";
 }
 
-Pion::Pion(bool f, bool ta, bool c, bool tr, std::string str) {
-    this->couleur = f;
-    this->forme = ta;
-    this->taille = c;
-    this->trou = tr;
+Pion::Pion(bool taille, bool forme, bool couleur, bool trou, std::string str) {
+    this->taille = taille;
+    this->forme = forme;
+    this->couleur = couleur;
+    this->trou = trou;
     this->lien_image = str;
 }
 
