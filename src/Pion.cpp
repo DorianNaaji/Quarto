@@ -26,10 +26,10 @@ bool Pion::equals(Pion * pion)
 {
     if(this != nullptr && pion != nullptr)
     {
-        bool a = this->couleur == pion->couleur;
-        bool b = this->forme == pion->forme;
-        bool c = this->taille == pion->taille;
-        bool d = this->trou == pion->trou;
+//        bool a = this->couleur == pion->couleur;
+//        bool b = this->forme == pion->forme;
+//        bool c = this->taille == pion->taille;
+//        bool d = this->trou == pion->trou;
         return( (this->couleur == pion->couleur)
                 || (this->forme == pion->forme)
                 || (this->taille == pion->taille)
