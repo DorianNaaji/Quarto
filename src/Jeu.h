@@ -9,6 +9,7 @@
 #include <vector>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include "Grille.h"
+#include "IA.h"
 
 class Jeu {
 private:
@@ -17,8 +18,9 @@ private:
     unsigned int tour;
     std::string J1, J2;
     std::vector<Pion> tabPion;
-
 public:
+
+    IA * ia;
 
     Jeu();
 

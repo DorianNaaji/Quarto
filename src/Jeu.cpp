@@ -9,6 +9,7 @@
 
 Jeu::Jeu() {
     this->g = new Grille;
+    this->ia = new IA;
     this->tour = 1;
     this->J1 = "J1";
     this->J2 = "J2";

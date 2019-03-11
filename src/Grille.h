@@ -36,6 +36,16 @@ public:
     bool win(std::string &joueur);
 
     bool full();
+
+    int heuristicValueHorizontal(unsigned int indice);
+
+    int heuristicValueVertical(unsigned int indice);
+
+    int heuristicValueDiagonal();
+
+    int heuristicValueAntiDiagonal();
+
+    int heuristicValue();
 };
 
 

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Grille.h"
 #include <assert.h>
+#include <vector>
 
 
 Grille::Grille() {
@@ -141,4 +142,108 @@ bool Grille::full() {
         }
     }
     return true;
+}
+
+int Grille::heuristicValueHorizontal(unsigned int indice) {
+    int value, bestValue = 0;
+    std::vector<Pion> tab;
+    bool equals;
+    for (unsigned int j1 = 0; j1 < dimY; ++j1) {
+        tab.clear();
+        tab.push_back(*(this->getCase(indice, j1).getPion()));
+
+        for (unsigned int j2 = j1; j2 < dimY; ++j2) {
+            for (auto &k : tab) {
+                equals = k.equals(this->getCase(indice, j2).getPion());
+            }
+            tab.push_back(*(this->getCase(indice, j2).getPion()));
+        }
+        value = (int)tab.size();
+        if (value > bestValue) bestValue = value;
+    }
+
+    return bestValue;
+}
+
+int Grille::heuristicValueVertical(unsigned int indice) {
+    int value, bestValue = 0;
+    std::vector<Pion> tab;
+    bool equals;
+    for (unsigned int i1 = 0; i1 < dimY; ++i1) {
+        tab.clear();
+        tab.push_back(*(this->getCase(i1, indice).getPion()));
+
+        for (unsigned int i2 = i1; i2 < dimY; ++i2) {
+            for (auto &k : tab) {
+                equals = k.equals(this->getCase(i2, indice).getPion());
+            }
+            tab.push_back(*(this->getCase(i2, indice).getPion()));
+        }
+        value = (int)tab.size();
+        if (value > bestValue) bestValue = value;
+    }
+
+    return bestValue;
+}
+
+int Grille::heuristicValueDiagonal() {
+    int value, bestValue = 0;
+    std::vector<Pion> tab;
+    bool equals;
+    for (unsigned int ind1 = 0; ind1 < dimX; ++ind1) {
+        tab.clear();
+        tab.push_back(*(this->getCase(ind1, ind1).getPion()));
+
+        for (unsigned int ind2 = ind1; ind2 < dimY; ++ind2) {
+            for (auto &k : tab) {
+                equals = k.equals(this->getCase(ind2, ind2).getPion());
+            }
+            tab.push_back(*(this->getCase(ind2, ind2).getPion()));
+        }
+        value = (int)tab.size();
+        if (value > bestValue) bestValue = value;
+    }
+
+    return bestValue;
+}
+
+int Grille::heuristicValueAntiDiagonal() {
+    int value, bestValue = 0;
+    std::vector<Pion> tab;
+    bool equals;
+    for (unsigned int ind1 = 0; ind1 < dimX; ++ind1) {
+        tab.clear();
+        tab.push_back(*(this->getCase(ind1, 3-ind1).getPion()));
+
+        for (unsigned int ind2 = ind1; ind2 < dimY; ++ind2) {
+            for (auto &k : tab) {
+                equals = k.equals(this->getCase(ind2, 3-ind2).getPion());
+            }
+            tab.push_back(*(this->getCase(ind2, 3-ind2).getPion()));
+        }
+        value = (int)tab.size();
+        if (value > bestValue) bestValue = value;
+    }
+
+    return bestValue;
+}
+
+int Grille::heuristicValue() {
+    int value, bestValue = 0;
+    // Comme dimX = dimY on peut faire une seule boucle
+    for (unsigned int indice = 0; indice < dimX; ++indice) {
+        value = heuristicValueHorizontal(indice);
+        if (value > bestValue) bestValue = value;
+
+        value = heuristicValueVertical(indice);
+        if (value > bestValue) bestValue = value;
+    }
+
+    value = heuristicValueDiagonal();
+    if (value > bestValue) bestValue = value;
+
+    value = heuristicValueAntiDiagonal();
+    if (value > bestValue) bestValue = value;
+
+    return bestValue;
 }
