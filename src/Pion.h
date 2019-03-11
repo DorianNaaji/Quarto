@@ -22,15 +22,13 @@ public:
 
     Pion(bool f, bool ta, bool c, bool tr, std::string str);
 
-    bool operator ==(const Pion &rhs) const;
+    bool equals(Pion *pion);
 
-    bool operator !=(const Pion &rhs) const;
+    bool operator !=(Pion * pion);
 
     void read();
 
     const std::string &getLien_image() const;
-
-    bool equals(Pion *pion);
 };
 
 

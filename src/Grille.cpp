@@ -37,15 +37,16 @@ void Grille::setCase(unsigned int x, unsigned int y, Pion * p) {
  */
 bool Grille::horizontalWin(std::string &joueur)
 {
-    for(int i = 0; i < this->dimY; i++)
+    for(unsigned int i = 0; i < this->dimY; i++)
     {
         //bool monT = this->getCase(0, 0).getPion()->equals(this->getCase(1, 0).getPion());
 
-        if(  this->getCase(0, i).getPion()->equals(this->getCase(1, i).getPion())
+        if(this->getCase(0, i).getPion()->equals(this->getCase(1, i).getPion())
         &&  this->getCase(0, i).getPion()->equals(this->getCase(2, i).getPion())
         &&  this->getCase(0, i).getPion()->equals(this->getCase(3, i).getPion())
-        /** &&  this->getCase(0, i).getPion() != nullptr*/)
+        &&  this->getCase(0, i).getPion() != nullptr)
         {
+            joueur = "horizontal";
             return true;
         }
     }
@@ -59,12 +60,13 @@ bool Grille::horizontalWin(std::string &joueur)
  */
 bool Grille::verticalWin(std::string &joueur)
 {
-    for(int i = 0; i < this->dimX; i++)
+    for(unsigned int i = 0; i < this->dimX; i++)
     {
         if( this->getCase(i, 0).getPion()->equals(this->getCase(i, 1).getPion())
         && this->getCase(i, 0).getPion()->equals(this->getCase(i, 2).getPion())
         && this->getCase(i, 0).getPion()->equals(this->getCase(i, 3).getPion()))
         {
+            joueur = "vertical";
             return true;
         }
     }
@@ -78,10 +80,19 @@ bool Grille::verticalWin(std::string &joueur)
  */
 bool Grille::diagonalWin(std::string &joueur)
 {
-    return
+    if (this->getCase(0, 0).getPion()->equals(this->getCase(1, 1).getPion())
+        && this->getCase(0, 0).getPion()->equals(this->getCase(2, 2).getPion())
+        && this->getCase(0, 0).getPion()->equals(this->getCase(3, 3).getPion())) {
+
+        joueur = "diag";
+        return true;
+    }
+
+    return false;
+    /*return
         this->getCase(0, 0).getPion()->equals(this->getCase(1, 1).getPion())
         && this->getCase(0, 0).getPion()->equals(this->getCase(2, 2).getPion())
-        && this->getCase(0, 0).getPion()->equals(this->getCase(3, 3).getPion());
+        && this->getCase(0, 0).getPion()->equals(this->getCase(3, 3).getPion());*/
 }
 
 /**
@@ -91,10 +102,20 @@ bool Grille::diagonalWin(std::string &joueur)
  */
 bool Grille::reverseDiagonalWin(std::string &joueur)
 {
-    return
+    if (this->getCase(0, 3).getPion()->equals(this->getCase(1, 2).getPion())
+        && this->getCase(0, 3).getPion()->equals(this->getCase(2, 1).getPion())
+        && this->getCase(0, 3).getPion()->equals(this->getCase(3, 0).getPion())) {
+
+        joueur = "anti-diag";
+        return true;
+    }
+
+    return false;
+
+    /*return
         this->getCase(0, 3).getPion()->equals(this->getCase(1, 2).getPion())
         && this->getCase(0, 3).getPion()->equals(this->getCase(2, 1).getPion())
-        && this->getCase(0, 3).getPion()->equals(this->getCase(3, 0).getPion());
+        && this->getCase(0, 3).getPion()->equals(this->getCase(3, 0).getPion());*/
 }
 
 /**
@@ -111,4 +132,13 @@ bool Grille::win(std::string &joueur)
         || (this->diagonalWin(joueur))
         || (this->reverseDiagonalWin(joueur))
     );
+}
+
+bool Grille::full() {
+    for (unsigned int i = 0; i < dimX; ++i) {
+        for (unsigned int j = 0; j < dimY; ++j) {
+            if (getCase(i, j).getPion() == nullptr) return false;
+        }
+    }
+    return true;
 }

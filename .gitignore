@@ -9,3 +9,5 @@ cmake_modules/
 CMakeLists.txt
 # Librairies
 libs/
+# Fichiers inutile
+.DS_Store

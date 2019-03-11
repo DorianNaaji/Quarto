@@ -139,14 +139,12 @@ void Jeu::run() {
 
                         //gestion des conditions de victoire (affichage console uniquement)
                         bool win = this->g->win(J1);
-                        if(win)
-                        {
+                        if(win) {
                             std::cout<<"--- J1/J2 Gagne ---"<<std::endl;
+                            std::cout<<J1<<std::endl;
                             // on ferme si c'est gagné (juste du test)
-                            _window.close();
-                        }
-                        else
-                        {
+                            //_window.close();
+                        } else if (this->g->full()) {
                             std::cout<<"pas de victoire"<<std::endl;
                         }
                     }

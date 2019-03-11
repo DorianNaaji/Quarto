@@ -34,6 +34,8 @@ public:
     bool reverseDiagonalWin(std::string &joueur);
 
     bool win(std::string &joueur);
+
+    bool full();
 };
 
 
