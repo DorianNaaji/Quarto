@@ -9,6 +9,7 @@
 
 Jeu::Jeu() {
     this->g = new Grille;
+    this->tour = 1;
     this->J1 = "J1";
     this->J2 = "J2";
 
@@ -70,10 +71,25 @@ void Jeu::selectCaseGrille(int mousseX, int mousseY, int & x, int & y) {
 }
 
 void Jeu::run() {
+    std::string infoTourJ1, infoTourJ2;
+
+    infoTourJ1 = J2+" choisit le pion et \n"+J1+" le place.";
+    infoTourJ2 = J1+" choisit le pion et \n"+J2+" le place.";
+
     int ind_pion = -1, ind_x = -1, ind_y = -1;
 
     // création de la fenêtre
     sf::RenderWindow _window(sf::VideoMode(1350, 1100), "Quarto", sf::Style::Titlebar | sf::Style::Close);
+
+    // création texte explicatif
+    sf::Text text;
+    sf::Font font;
+    font.loadFromFile("../fonts/Ubuntu-Regular.ttf");
+    text.setFont(font);
+    text.setFillColor(sf::Color::Black);
+    text.setCharacterSize(50);
+    text.setString(infoTourJ1);
+    text.setPosition(700, 20);
 
     std::vector<sf::RectangleShape> _grille;
 
@@ -111,6 +127,11 @@ void Jeu::run() {
     // on fait tourner le programme tant que la fenêtre n'a pas été fermée
     while (_window.isOpen())
     {
+        if (tour%2 == 1) {
+            text.setString(infoTourJ1);
+        }else {
+            text.setString(infoTourJ2);
+        }
         // on traite tous les évènements de la fenêtre qui ont été générés depuis la dernière itération de la boucle
         while (_window.pollEvent(event))
         {
@@ -129,13 +150,14 @@ void Jeu::run() {
                             this->g->setCase(static_cast<unsigned int>(ind_x), static_cast<unsigned int>(ind_y), & this->tabPion[ind_pion]);
                             _grille[ind_y*4+ind_x].setTexture(_openGrille[ind_pion].getTexture());
                             _openGrille[ind_pion].setTexture(nullptr);
+                            _openGrille[ind_pion].setOutlineColor(sf::Color::Transparent);
+
+                            ind_pion = -1;
+                            ind_x = -1;
+                            ind_y = -1;
+                            tour++;
                         }
 
-                        _openGrille[ind_pion].setOutlineColor(sf::Color::Transparent);
-
-                        ind_pion = -1;
-                        ind_x = -1;
-                        ind_y = -1;
 
                         //gestion des conditions de victoire (affichage console uniquement)
                         bool win = this->g->win(J1);
@@ -160,6 +182,8 @@ void Jeu::run() {
 
         // c'est ici qu'on dessine tout
         // window.draw(...);
+
+        _window.draw(text);
 
         for (sf::RectangleShape  & child : _grille) {
             _window.draw(child);

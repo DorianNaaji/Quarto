@@ -14,6 +14,7 @@ class Jeu {
 private:
 
     Grille * g;
+    unsigned int tour;
     std::string J1, J2;
     std::vector<Pion> tabPion;
 
