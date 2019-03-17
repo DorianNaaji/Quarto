@@ -4,7 +4,7 @@
 int main() {
     Jeu j;
 
-    j.run();
+    j.menu();
 
     return 0;
 }

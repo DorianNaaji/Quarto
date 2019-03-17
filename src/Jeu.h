@@ -28,6 +28,8 @@ public:
 
     void selectCaseGrille(int mousseX, int mousseY, int & x, int & y);
 
+    void menu();
+
     void run();
 };
 

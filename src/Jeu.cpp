@@ -71,6 +71,76 @@ void Jeu::selectCaseGrille(int mousseX, int mousseY, int & x, int & y) {
     }
 }
 
+void Jeu::menu() {
+    int largeur = 1350, hauteur = 1100;
+    // création de la fenêtre
+    sf::RenderWindow window(sf::VideoMode(largeur, hauteur), "Mode de Jeu | Quarto", sf::Style::Titlebar | sf::Style::Close);
+
+    //Initialisation de la font
+    sf::Font font_titre, font_mode;
+    font_titre.loadFromFile("../fonts/PermanentMarker-regular.ttf");
+    font_mode.loadFromFile("../fonts/Ubuntu-regular.ttf");
+
+    //Création du texte
+    sf::Text titre;
+    titre.setFont(font_titre);
+    titre.setString("Choix du mode de jeu");
+    titre.setCharacterSize(100);
+    titre.setPosition((largeur-titre.getLocalBounds().width)/2, 40);
+    titre.setFillColor(sf::Color::Red);
+
+    sf::Text pvp;
+    pvp.setFont(font_mode);
+    pvp.setString("Mode joueur contre joueur");
+    pvp.setCharacterSize(75);
+    pvp.setPosition((largeur-pvp.getLocalBounds().width)/2, 300);
+    pvp.setFillColor(sf::Color::Blue);
+
+    sf::Text ia1;
+    ia1.setFont(font_mode);
+    ia1.setString("Mode joueur contre IA (alpha-beta)");
+    ia1.setCharacterSize(75);
+    ia1.setPosition((largeur-ia1.getLocalBounds().width)/2, 500);
+    ia1.setFillColor(sf::Color::Blue);
+
+    sf::Event event;
+
+    // on fait tourner le programme tant que la fenêtre n'a pas été fermée
+    while (window.isOpen())
+    {
+        // on traite tous les évènements de la fenêtre qui ont été générés depuis la dernière itération de la boucle
+        while (window.pollEvent(event))
+        {
+            // fermeture de la fenêtre lorsque l'utilisateur le souhaite
+            switch (event.type) {
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+
+                case sf::Event::MouseButtonPressed:
+                    
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        // effacement de la fenêtre en blanc
+        window.clear(sf::Color::White);
+
+        // c'est ici qu'on dessine tout
+        // window.draw(...);
+
+        window.draw(titre);
+        window.draw(pvp);
+        window.draw(ia1);
+
+        // fin de la frame courante, affichage de tout ce qu'on a dessiné
+        window.display();
+    }
+}
+
 void Jeu::run() {
     std::string infoTourJ1, infoTourJ2;
 
@@ -80,7 +150,7 @@ void Jeu::run() {
     int ind_pion = -1, ind_x = -1, ind_y = -1;
 
     // création de la fenêtre
-    sf::RenderWindow _window(sf::VideoMode(1350, 1100), "Quarto", sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(1350, 1100), "Quarto", sf::Style::Titlebar | sf::Style::Close);
 
     // création texte explicatif
     sf::Text text;
@@ -92,7 +162,7 @@ void Jeu::run() {
     text.setString(infoTourJ1);
     text.setPosition(700, 20);
 
-    std::vector<sf::RectangleShape> _grille;
+    std::vector<sf::RectangleShape> grille;
 
     for (int i = 0; i < 16; ++i) {
         sf::RectangleShape rect(sf::Vector2f(150.f, 150.f));
@@ -100,10 +170,10 @@ void Jeu::run() {
         rect.setOutlineThickness(5.f);
         rect.setOutlineColor(sf::Color::Black);
         rect.setTexture(nullptr);
-        _grille.push_back(rect);
+        grille.push_back(rect);
     }
 
-    std::vector<sf::RectangleShape> _openGrille;
+    std::vector<sf::RectangleShape> openGrille;
 
     sf::Texture * texture;
     for (int i = 0; i < 16; ++i) {
@@ -120,13 +190,13 @@ void Jeu::run() {
 
         rect.setTexture(texture);
 
-        _openGrille.push_back(rect);
+        openGrille.push_back(rect);
     }
 
     sf::Event event;
 
     // on fait tourner le programme tant que la fenêtre n'a pas été fermée
-    while (_window.isOpen())
+    while (window.isOpen())
     {
         if (tour%2 == 1) {
             text.setString(infoTourJ1);
@@ -134,24 +204,24 @@ void Jeu::run() {
             text.setString(infoTourJ2);
         }
         // on traite tous les évènements de la fenêtre qui ont été générés depuis la dernière itération de la boucle
-        while (_window.pollEvent(event))
+        while (window.pollEvent(event))
         {
             // fermeture de la fenêtre lorsque l'utilisateur le souhaite
             switch (event.type) {
-                case sf::Event::Closed: _window.close();
+                case sf::Event::Closed: window.close();
                     break;
 
                 case sf::Event::MouseButtonPressed:
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && ind_pion == -1) {
-                        ind_pion = this->selectPion(sf::Mouse::getPosition(_window).x, sf::Mouse::getPosition(_window).y, _openGrille);
+                        ind_pion = this->selectPion(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, openGrille);
                     } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                        this->selectCaseGrille(sf::Mouse::getPosition(_window).x, sf::Mouse::getPosition(_window).y, ind_x, ind_y);
+                        this->selectCaseGrille(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, ind_x, ind_y);
 
                         if (ind_pion != -1 && ind_y != -1) {
                             this->g->setCase(static_cast<unsigned int>(ind_x), static_cast<unsigned int>(ind_y), & this->tabPion[ind_pion]);
-                            _grille[ind_y*4+ind_x].setTexture(_openGrille[ind_pion].getTexture());
-                            _openGrille[ind_pion].setTexture(nullptr);
-                            _openGrille[ind_pion].setOutlineColor(sf::Color::Transparent);
+                            grille[ind_y*4+ind_x].setTexture(openGrille[ind_pion].getTexture());
+                            openGrille[ind_pion].setTexture(nullptr);
+                            openGrille[ind_pion].setOutlineColor(sf::Color::Transparent);
 
                             ind_pion = -1;
                             ind_x = -1;
@@ -166,7 +236,7 @@ void Jeu::run() {
                             std::cout<<"--- J1/J2 Gagne ---"<<std::endl;
                             std::cout<<J1<<std::endl;
                             // on ferme si c'est gagné (juste du test)
-                            //_window.close();
+                            //window.close();
                         } else if (this->g->full()) {
                             std::cout<<"pas de victoire"<<std::endl;
                         }
@@ -179,23 +249,23 @@ void Jeu::run() {
         }
 
         // effacement de la fenêtre en blanc
-        _window.clear(sf::Color::White);
+        window.clear(sf::Color::White);
 
         // c'est ici qu'on dessine tout
         // window.draw(...);
 
-        _window.draw(text);
+        window.draw(text);
 
-        for (sf::RectangleShape  & child : _grille) {
-            _window.draw(child);
+        for (sf::RectangleShape  & child : grille) {
+            window.draw(child);
         }
 
-        for (sf::RectangleShape & child : _openGrille) {
-            _window.draw(child);
+        for (sf::RectangleShape & child : openGrille) {
+            window.draw(child);
         }
 
         // fin de la frame courante, affichage de tout ce qu'on a dessiné
-        _window.display();
+        window.display();
     }
 
 }
