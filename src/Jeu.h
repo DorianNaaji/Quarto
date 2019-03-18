@@ -30,7 +30,11 @@ public:
 
     void menu();
 
-    void run();
+    void resultat(std::string gagnant);
+
+    void pvp();
+
+    void IA_alpha_beta();
 };
 
 

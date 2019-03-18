@@ -4,7 +4,7 @@
 
 #include "IA.h"
 
-void IA::remplirArbre(Grille g, int dept, int deptFin, std::vector<Pion> &tabPion) {
+void IA::remplirArbre(Grille g, int dept, int deptFin, std::vector<Pion> &tabPion, Pion * pionDepart = nullptr) {
     this->grid = g;
     this->children.clear();
 
@@ -15,15 +15,30 @@ void IA::remplirArbre(Grille g, int dept, int deptFin, std::vector<Pion> &tabPio
         for (unsigned int i = 0; i < this->grid.getDimX(); ++i) {
             for (unsigned int j = 0; j < this->grid.getDimY(); ++j) {
                 if (tmp.getCase(i, j).getPion() == nullptr) {
-                    for (int k = 0; k < tabPion.size(); ++k) {
-                        tmp.getCase(i, j).setPion(&tabPion[k]);
+                    if (dept == 0 && pionDepart != nullptr) {
+                        tmp.getCase(i, j).setPion(pionDepart);
                         child = new IA();
                         child->ind_x = i;
                         child->ind_y = j;
-                        child->pion = tabPion[k];
-                        tabPion.erase(tabPion.begin()+k);
-                        child->remplirArbre(tmp, dept+1, deptFin, tabPion);
-                        tabPion.insert(tabPion.begin()+k,child->pion);
+                        child->pion = *pionDepart;
+                        for (int k = 0; k < tabPion.size(); ++k) {
+                            if (tabPion[k] == pionDepart) {
+                                tabPion.erase(tabPion.begin()+k);
+                                child->remplirArbre(tmp, dept+1, deptFin, tabPion);
+                                tabPion.insert(tabPion.begin()+k,child->pion);
+                            }
+                        }
+                    } else {
+                        for (int k = 0; k < tabPion.size(); ++k) {
+                            tmp.getCase(i, j).setPion(&tabPion[k]);
+                            child = new IA();
+                            child->ind_x = i;
+                            child->ind_y = j;
+                            child->pion = tabPion[k];
+                            tabPion.erase(tabPion.begin()+k);
+                            child->remplirArbre(tmp, dept+1, deptFin, tabPion);
+                            tabPion.insert(tabPion.begin()+k,child->pion);
+                        }
                     }
                 }
             }

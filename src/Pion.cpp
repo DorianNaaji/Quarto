@@ -39,8 +39,7 @@ bool Pion::equals(Pion * pion)
     return false;
 }
 
-std::string Pion::print()
-{
+std::string Pion::print() {
     if(this!= nullptr)
     {
         std::string ret = "";
@@ -87,6 +86,13 @@ std::string Pion::print()
         return "Pion inexistant";
     }
 
+}
+
+bool Pion::operator==(Pion * pion) {
+    return( (this->couleur == pion->couleur)
+            && (this->forme == pion->forme)
+            && (this->taille == pion->taille)
+            && (this->trou == pion->trou) );
 }
 
 bool Pion::operator!=(Pion * pion) {

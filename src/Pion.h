@@ -25,6 +25,8 @@ public:
 
     bool equals(Pion *pion);
 
+    bool operator ==(Pion * pion);
+
     bool operator !=(Pion * pion);
 
     void read();
