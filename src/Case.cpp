@@ -13,5 +13,5 @@ Pion *Case::getPion() const {
 }
 
 void Case::setPion(Pion *pion) {
-    Case::pion = pion;
+    this->pion = pion;
 }

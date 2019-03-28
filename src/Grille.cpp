@@ -29,14 +29,11 @@ void Grille::setCase(unsigned int x, unsigned int y, Pion * p) {
     if (x < dimX && y < dimY) grid[y*dimX+x].setPion(p);
 }
 
-
-
 /**
  *
- * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
  * @return bool : gagné (true) ou non (false) à l'horizontale
  */
-bool Grille::horizontalWin(std::string &joueur)
+bool Grille::horizontalWin()
 {
     for(unsigned int i = 0; i < this->dimY; i++)
     {
@@ -47,7 +44,6 @@ bool Grille::horizontalWin(std::string &joueur)
         &&  this->getCase(0, i).getPion()->equals(this->getCase(3, i).getPion())
         &&  this->getCase(0, i).getPion() != nullptr)
         {
-            joueur = "horizontal";
             return true;
         }
     }
@@ -59,7 +55,7 @@ bool Grille::horizontalWin(std::string &joueur)
  * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
  * @return bool : gagné (true) ou non (false) à la verticale
  */
-bool Grille::verticalWin(std::string &joueur)
+bool Grille::verticalWin()
 {
     for(unsigned int i = 0; i < this->dimX; i++)
     {
@@ -67,7 +63,6 @@ bool Grille::verticalWin(std::string &joueur)
         && this->getCase(i, 0).getPion()->equals(this->getCase(i, 2).getPion())
         && this->getCase(i, 0).getPion()->equals(this->getCase(i, 3).getPion()))
         {
-            joueur = "vertical";
             return true;
         }
     }
@@ -79,7 +74,7 @@ bool Grille::verticalWin(std::string &joueur)
  * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
  * @return bool : gagné (true) ou non (false) avec la diagonale
  */
-bool Grille::diagonalWin(std::string &joueur)
+bool Grille::diagonalWin()
 {
     unsigned int i;
     unsigned int j;
@@ -94,23 +89,11 @@ bool Grille::diagonalWin(std::string &joueur)
     // alignés et retourne si il est égal à 4 en fin de fonction.
     for(i = 0, j = 0; j < this->dimX; i++, j++)
     {
-        std::cout<<"Pions en partant d'en bas à droite : "<<std::endl;
-        std::cout<<"PION 1"<<std::endl;
-        std::cout<<this->getCase(3, 3).getPion()->print() <<std::endl;
-        std::cout<<"PION 2"<<std::endl;
-        std::cout<<this->getCase(2, 2).getPion()->print() <<std::endl;
-        std::cout<<"PION 3"<<std::endl;
-        std::cout<<this->getCase(1, 1).getPion()->print() <<std::endl;
-        std::cout<<"PION 4"<<std::endl;
-        std::cout<<this->getCase(0, 0).getPion()->print() <<std::endl;
-         if
-         (
-                 (this->getCase(i, j).getPion()->equals(this->getCase(0, 0).getPion()))
-                 && (this->getCase(i, j).getPion()->equals(this->getCase(1, 1).getPion()))
-                 && (this->getCase(i, j).getPion()->equals(this->getCase(2, 2).getPion()))
-                 && (this->getCase(i, j).getPion()->equals(this->getCase(3, 3).getPion()))
-         )
-         {
+        if ((this->getCase(i, j).getPion()->equals(this->getCase(0, 0).getPion()))
+            && (this->getCase(i, j).getPion()->equals(this->getCase(1, 1).getPion()))
+            && (this->getCase(i, j).getPion()->equals(this->getCase(2, 2).getPion()))
+            && (this->getCase(i, j).getPion()->equals(this->getCase(3, 3).getPion()))) {
+
              nbPionsSimilaires++;
          }
     }
@@ -119,10 +102,9 @@ bool Grille::diagonalWin(std::string &joueur)
 
 /**
  *
- * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
  * @return bool : gagné (true) ou non (false) avec la diagonale inverse
  */
-bool Grille::reverseDiagonalWin(std::string &joueur)
+bool Grille::reverseDiagonalWin()
 {
     unsigned int i;
     unsigned int j;
@@ -150,14 +132,14 @@ bool Grille::reverseDiagonalWin(std::string &joueur)
  * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
  * @return bool : gagné (true) ou non (false)
  */
-bool Grille::win(std::string &joueur)
+bool Grille::win()
 {
     return
     (
-        (this->horizontalWin(joueur))
-        || (this->verticalWin(joueur))
-        || (this->diagonalWin(joueur))
-        || (this->reverseDiagonalWin(joueur))
+        (this->horizontalWin())
+        || (this->verticalWin())
+        || (this->diagonalWin())
+        || (this->reverseDiagonalWin())
     );
 }
 

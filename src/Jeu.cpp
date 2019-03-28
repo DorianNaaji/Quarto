@@ -7,7 +7,9 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-Jeu::Jeu() {
+Jeu::Jeu() = default;
+
+void Jeu::init() {
     this->g = new Grille;
     this->ia = new IA;
     this->tour = 1;
@@ -72,7 +74,7 @@ void Jeu::selectCaseGrille(int mousseX, int mousseY, int & x, int & y) {
 }
 
 void Jeu::menu() {
-    int largeur = 1350, hauteur = 1100;
+    unsigned int largeur = 1350, hauteur = 800;
     // création de la fenêtre
     sf::RenderWindow window(sf::VideoMode(largeur, hauteur), "Mode de Jeu | Quarto", sf::Style::Titlebar | sf::Style::Close);
 
@@ -82,28 +84,43 @@ void Jeu::menu() {
     font_mode.loadFromFile("../fonts/Ubuntu-regular.ttf");
 
     //Création du texte
+    sf::Text name;
+    name.setFont(font_titre);
+    name.setString("PolyQuarto");
+    name.setCharacterSize(150);
+    name.setPosition((largeur-name.getLocalBounds().width)/2, 10);
+    name.setFillColor(sf::Color(0, 204, 102));
+
     sf::Text titre;
     titre.setFont(font_titre);
     titre.setString("Choix du mode de jeu");
     titre.setCharacterSize(100);
-    titre.setPosition((largeur-titre.getLocalBounds().width)/2, 40);
+    titre.setPosition((largeur-titre.getLocalBounds().width)/2, 200);
     titre.setFillColor(sf::Color::Red);
+
 
     sf::Text pvp;
     pvp.setFont(font_mode);
     pvp.setString("Mode joueur contre joueur");
     pvp.setCharacterSize(75);
-    pvp.setPosition((largeur-pvp.getLocalBounds().width)/2, 300);
-    pvp.setFillColor(sf::Color::Blue);
+    pvp.setPosition((largeur-pvp.getLocalBounds().width)/2, 400);
+    pvp.setFillColor(sf::Color::White);
 
     sf::Text ia1;
     ia1.setFont(font_mode);
     ia1.setString("Mode joueur contre IA (alpha-beta)");
     ia1.setCharacterSize(75);
-    ia1.setPosition((largeur-ia1.getLocalBounds().width)/2, 500);
-    ia1.setFillColor(sf::Color::Blue);
+    ia1.setPosition((largeur-ia1.getLocalBounds().width)/2, 510);
+    ia1.setFillColor(sf::Color::White);
 
-    sf::Event event;
+    sf::Text quit;
+    quit.setFont(font_titre);
+    quit.setString("Quitter");
+    quit.setCharacterSize(75);
+    quit.setPosition((largeur-quit.getLocalBounds().width)/2, 710);
+    quit.setFillColor(sf::Color::Red);
+
+    sf::Event event{};
 
     // on fait tourner le programme tant que la fenêtre n'a pas été fermée
     while (window.isOpen())
@@ -119,23 +136,40 @@ void Jeu::menu() {
 
                 case sf::Event::MouseButtonPressed:
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                        /*
+                         * Fermeture fenètre
+                         */
+
+
+
                         if (sf::Mouse::getPosition(window).x >= ((largeur-pvp.getLocalBounds().width)/2)
                             && sf::Mouse::getPosition(window).x <= ((largeur+pvp.getLocalBounds().width)/2)
-                            && sf::Mouse::getPosition(window).y >= 300
-                            && sf::Mouse::getPosition(window).y <= 375) {
+                            && sf::Mouse::getPosition(window).y >= pvp.getPosition().y
+                            && sf::Mouse::getPosition(window).y <= pvp.getPosition().y+pvp.getCharacterSize()) {
                             /*
                              * Cas ou on choisit le mode 2 joueurs
                              */
                             window.close();
+                            this->init();
                             this->pvp();
                         }else if (sf::Mouse::getPosition(window).x >= ((largeur-ia1.getLocalBounds().width)/2)
                                   && sf::Mouse::getPosition(window).x <= ((largeur+ia1.getLocalBounds().width)/2)
-                                  && sf::Mouse::getPosition(window).y >= 500
-                                  && sf::Mouse::getPosition(window).y <= 575) {
+                                  && sf::Mouse::getPosition(window).y >= ia1.getPosition().y
+                                  && sf::Mouse::getPosition(window).y <= ia1.getPosition().y+ia1.getCharacterSize()) {
                             /*
                              * cas joueur vs IA (Alpha-beta)
                              */
-                            std::cout<<"IA alpha beta"<<std::endl;
+                            window.close();
+                            this->init();
+                            this->IA_alpha_beta();
+                        }else if (sf::Mouse::getPosition(window).x >= ((largeur-quit.getLocalBounds().width)/2)
+                                  && sf::Mouse::getPosition(window).x <= ((largeur+quit.getLocalBounds().width)/2)
+                                  && sf::Mouse::getPosition(window).y >= quit.getPosition().y
+                                  && sf::Mouse::getPosition(window).y <= quit.getPosition().y+quit.getCharacterSize()) {
+                            /*
+                             * quitter
+                             */
+                            window.close();
                         }
                     }
                     break;
@@ -146,22 +180,24 @@ void Jeu::menu() {
         }
 
         // effacement de la fenêtre en blanc
-        window.clear(sf::Color::White);
+        window.clear(sf::Color(100, 100, 120));
 
         // c'est ici qu'on dessine tout
         // window.draw(...);
 
+        window.draw(name);
         window.draw(titre);
         window.draw(pvp);
         window.draw(ia1);
+        window.draw(quit);
 
         // fin de la frame courante, affichage de tout ce qu'on a dessiné
         window.display();
     }
 }
 
-void Jeu::resultat(std::string gagnant) {
-    unsigned int largeur = 1350, hauteur = 700;
+void Jeu::resultat(const std::string & message) {
+    unsigned int largeur = 1350, hauteur = 600;
     // création de la fenêtre
     sf::RenderWindow window(sf::VideoMode(largeur, hauteur), "Resultat | Quarto", sf::Style::Titlebar | sf::Style::Close);
 
@@ -173,10 +209,10 @@ void Jeu::resultat(std::string gagnant) {
     //Création du texte
     sf::Text titre;
     titre.setFont(font_titre);
-    if (gagnant == "match nul") {
+    if (message == "match nul") {
         titre.setString("Match nul !");
     }else {
-        titre.setString("Le gagnant de cette\npartie est :\n"+gagnant);
+        titre.setString("Le gagnant de cette\npartie est : "+message);
     }
     titre.setCharacterSize(100);
     titre.setPosition(40, 40);
@@ -184,19 +220,19 @@ void Jeu::resultat(std::string gagnant) {
 
     sf::Text retour;
     retour.setFont(font_mode);
-    retour.setString("Retour aux modes de jeu");
+    retour.setString("Retour aux modes de jeu ");
     retour.setCharacterSize(75);
-    retour.setPosition((largeur-retour.getLocalBounds().width)/2, 500);
-    retour.setFillColor(sf::Color::Blue);
+    retour.setPosition(largeur-retour.getLocalBounds().width, 400);
+    retour.setFillColor(sf::Color::White);
 
     sf::Text quitter;
     quitter.setFont(font_mode);
-    quitter.setString("Quitter");
+    quitter.setString("Quitter ");
     quitter.setCharacterSize(75);
-    quitter.setPosition((largeur-quitter.getLocalBounds().width)/2, 600);
-    quitter.setFillColor(sf::Color::Blue);
+    quitter.setPosition(largeur-quitter.getLocalBounds().width, 500);
+    quitter.setFillColor(sf::Color::White);
 
-    sf::Event event;
+    sf::Event event{};
 
     // on fait tourner le programme tant que la fenêtre n'a pas été fermée
     while (window.isOpen())
@@ -212,15 +248,15 @@ void Jeu::resultat(std::string gagnant) {
 
                 case sf::Event::MouseButtonPressed:
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                        if (sf::Mouse::getPosition(window).x >= ((largeur-retour.getLocalBounds().width)/2)
-                            && sf::Mouse::getPosition(window).x <= ((largeur+retour.getLocalBounds().width)/2)
+                        if (sf::Mouse::getPosition(window).x >= (largeur-retour.getLocalBounds().width)
+                            && sf::Mouse::getPosition(window).x <= largeur
                             && sf::Mouse::getPosition(window).y >= retour.getPosition().y
                             && sf::Mouse::getPosition(window).y <= retour.getPosition().y+retour.getCharacterSize()) {
 
                             window.close();
                             this->menu();
-                        }else if (sf::Mouse::getPosition(window).x >= ((largeur-quitter.getLocalBounds().width)/2)
-                                  && sf::Mouse::getPosition(window).x <= ((largeur+quitter.getLocalBounds().width)/2)
+                        }else if (sf::Mouse::getPosition(window).x >= (largeur-quitter.getLocalBounds().width)
+                                  && sf::Mouse::getPosition(window).x <= largeur
                                   && sf::Mouse::getPosition(window).y >= quitter.getPosition().y
                                   && sf::Mouse::getPosition(window).y <= quitter.getPosition().y+quitter.getCharacterSize()) {
 
@@ -235,7 +271,7 @@ void Jeu::resultat(std::string gagnant) {
         }
 
         // effacement de la fenêtre en blanc
-        window.clear(sf::Color::White);
+        window.clear(sf::Color(100, 100, 120));
 
         // c'est ici qu'on dessine tout
         // window.draw(...);
@@ -250,7 +286,7 @@ void Jeu::resultat(std::string gagnant) {
 }
 
 void Jeu::pvp() {
-    std::string infoTourJ1, infoTourJ2;
+    std::string infoTourJ1, infoTourJ2, joueur;
 
     infoTourJ1 = J2+" choisit le pion et \n"+J1+" le place.";
     infoTourJ2 = J1+" choisit le pion et \n"+J2+" le place.";
@@ -301,24 +337,17 @@ void Jeu::pvp() {
         openGrille.push_back(rect);
     }
 
-    sf::Event event;
+    sf::Event event{};
 
     // on fait tourner le programme tant que la fenêtre n'a pas été fermée
     while (window.isOpen())
     {
-        std::string joueur;
-        if (g->win(joueur)) {
-            window.close();
-            this->resultat(joueur);
-        } else if (tour == 17) {
-            window.close();
-            this->resultat("match nul");
-        }
-
         if (tour%2 == 1) {
             text.setString(infoTourJ1);
+            joueur = J1;
         }else {
             text.setString(infoTourJ2);
+            joueur = J2;
         }
         // on traite tous les évènements de la fenêtre qui ont été générés depuis la dernière itération de la boucle
         while (window.pollEvent(event))
@@ -347,15 +376,14 @@ void Jeu::pvp() {
                         }
 
 
-                        //gestion des conditions de victoire (affichage console uniquement)
-                        bool win = this->g->win(J1);
-                        if(win) {
-                            std::cout<<"--- J1/J2 Gagne ---"<<std::endl;
-                            std::cout<<J1<<std::endl;
-                            // on ferme si c'est gagné (juste du test)
-                            //window.close();
+                        //gestion des conditions de victoire
+
+                        if(this->g->win()) {
+                            window.close();
+                            this->resultat(joueur);
                         } else if (this->g->full()) {
-                            std::cout<<"pas de victoire"<<std::endl;
+                            window.close();
+                            this->resultat("match nul");
                         }
                     }
                     break;
@@ -388,12 +416,13 @@ void Jeu::pvp() {
 }
 
 void Jeu::IA_alpha_beta() {
-    std::string infoTourJ1, infoTourIA;
-
-    infoTourJ1 = "L'IA choisit le pion et \n"+J1+" le place.";
-    infoTourIA = J1+" choisit le pion et \n L'IA le place.";
+    std::string infoTourJ1, infoTourIA, joueur;
 
     int ind_pion = -1, ind_x = -1, ind_y = -1;
+
+    infoTourJ1 = "L'IA choisit le pion et\n"+J1+" le place.";
+    infoTourIA = J1+" choisit le pion et\nL'IA le place.";
+
 
     // création de la fenêtre
     sf::RenderWindow window(sf::VideoMode(1350, 1100), "Quarto", sf::Style::Titlebar | sf::Style::Close);
@@ -439,15 +468,17 @@ void Jeu::IA_alpha_beta() {
         openGrille.push_back(rect);
     }
 
-    sf::Event event;
+    sf::Event event{};
 
     // on fait tourner le programme tant que la fenêtre n'a pas été fermée
-    while (window.isOpen())
-    {
+    while (window.isOpen()) {
+
         if (tour%2 == 1) {
-            text.setString(infoTourJ1);
-        }else {
             text.setString(infoTourIA);
+            joueur = "IA";
+        }else {
+            text.setString(infoTourJ1);
+            joueur = "J1";
         }
         // on traite tous les évènements de la fenêtre qui ont été générés depuis la dernière itération de la boucle
         while (window.pollEvent(event))
@@ -459,12 +490,58 @@ void Jeu::IA_alpha_beta() {
 
                 case sf::Event::MouseButtonPressed:
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && ind_pion == -1) {
-                        ind_pion = this->selectPion(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, openGrille);
-                    } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                        this->selectCaseGrille(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, ind_x, ind_y);
+                        ind_pion = this->selectPion(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y,
+                                openGrille);
 
-                        if (ind_pion != -1 && ind_y != -1) {
-                            this->g->setCase(static_cast<unsigned int>(ind_x), static_cast<unsigned int>(ind_y), & this->tabPion[ind_pion]);
+                        if (tour%2 == 1) {
+                            std::cout<<"Creation arbre..."<<std::endl;
+                            ia->remplirArbre(*g, 0, 2, tabPion, &tabPion[ind_pion]);
+                            std::cout<<"Creation arbre... ok!"<<std::endl;
+                            std::cout<<"Selection case..."<<std::endl;
+                            ia->alphaBeta(ind_x, ind_y, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour,
+                                          true);
+                            std::cout<<"Selection case... ok!"<<std::endl;
+                            std::cout<<ind_x<<" | "<<ind_y<<std::endl;
+
+                            std::cout<<"Placement Pion..."<<std::endl;
+                            grille[ind_y*4+ind_x].setTexture(openGrille[ind_pion].getTexture());
+                            std::cout<<"Placement Texture... ok!"<<std::endl;
+                            openGrille[ind_pion].setTexture(nullptr);
+                            std::cout<<"Suppresion Texture... ok!"<<std::endl;
+                            openGrille[ind_pion].setOutlineColor(sf::Color::Transparent);
+                            std::cout<<"Suppresion Bordure... ok!"<<std::endl;
+                            std::cout<<"Placement Pion... ok!"<<std::endl;
+
+                            /*
+                             * Select pion
+                             */
+
+                            ia->selectPion(ind_pion, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour,
+                                           false);
+
+                            openGrille[ind_pion].setOutlineColor(sf::Color::Red);
+
+                            ind_x = -1;
+                            ind_y = -1;
+                            tour++;
+
+                            //gestion des conditions de victoire
+                            if(this->g->win()) {
+                                //window.close();
+                                //this->resultat(joueur);
+                            } else if (this->g->full()) {
+                                window.close();
+                                this->resultat("match nul");
+                            }
+                        }
+                    } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                        this->selectCaseGrille(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y,
+                                ind_x, ind_y);
+
+                        if (ind_pion != -1 && ind_x != -1 && ind_y != -1) {
+                            this->g->setCase(static_cast<unsigned int>(ind_x), static_cast<unsigned int>(ind_y),
+                                    & this->tabPion[ind_pion]);
+
                             grille[ind_y*4+ind_x].setTexture(openGrille[ind_pion].getTexture());
                             openGrille[ind_pion].setTexture(nullptr);
                             openGrille[ind_pion].setOutlineColor(sf::Color::Transparent);
@@ -476,15 +553,14 @@ void Jeu::IA_alpha_beta() {
                         }
 
 
-                        //gestion des conditions de victoire (affichage console uniquement)
-                        bool win = this->g->win(J1);
+                        //gestion des conditions de victoire
+                        bool win = this->g->win();
                         if(win) {
-                            std::cout<<"--- J1/J2 Gagne ---"<<std::endl;
-                            std::cout<<J1<<std::endl;
-                            // on ferme si c'est gagné (juste du test)
                             //window.close();
+                            //this->resultat(joueur);
                         } else if (this->g->full()) {
-                            std::cout<<"pas de victoire"<<std::endl;
+                            window.close();
+                            this->resultat("match nul");
                         }
                     }
                     break;

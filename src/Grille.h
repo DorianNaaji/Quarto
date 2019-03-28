@@ -25,15 +25,15 @@ public:
 
     void setCase(unsigned int x, unsigned int y, Pion * p);
 
-    bool horizontalWin(std::string &joueur);
+    bool horizontalWin();
 
-    bool verticalWin(std::string &joueur);
+    bool verticalWin();
 
-    bool diagonalWin(std::string &joueur);
+    bool diagonalWin();
 
-    bool reverseDiagonalWin(std::string &joueur);
+    bool reverseDiagonalWin();
 
-    bool win(std::string &joueur);
+    bool win();
 
     bool full();
 

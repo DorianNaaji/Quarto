@@ -14,15 +14,17 @@
 class Jeu {
 private:
 
-    Grille * g;
-    unsigned int tour;
+    Grille * g{};
+    unsigned int tour{};
     std::string J1, J2;
     std::vector<Pion> tabPion;
 public:
 
-    IA * ia;
+    IA * ia{};
 
     Jeu();
+
+    void init();
 
     int selectPion(int mousseX, int mousseY, std::vector<sf::RectangleShape> & og);
 
@@ -30,7 +32,7 @@ public:
 
     void menu();
 
-    void resultat(std::string gagnant);
+    void resultat(const std::string& gagnant);
 
     void pvp();
 

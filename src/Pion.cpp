@@ -1,3 +1,5 @@
+#include <utility>
+
 #include <iostream>
 #include "Pion.h"
 
@@ -14,7 +16,7 @@ Pion::Pion(bool taille, bool forme, bool couleur, bool trou, std::string str) {
     this->forme = forme;
     this->couleur = couleur;
     this->trou = trou;
-    this->lien_image = str;
+    this->lien_image = std::move(str);
 }
 
 /**
@@ -37,55 +39,6 @@ bool Pion::equals(Pion * pion)
                 || (this->trou == pion->trou) );
     }
     return false;
-}
-
-std::string Pion::print() {
-    if(this!= nullptr)
-    {
-        std::string ret = "";
-        ret += "Couleur : ";
-        if(!this->couleur)
-        {
-            ret += "Rouge \n";
-        }
-        else
-        {
-            ret += "Bleu \n";
-        }
-        ret += "Forme : ";
-        if(!this->forme)
-        {
-            ret += "Rond \n";
-        }
-        else
-        {
-            ret += "Carré \n";
-        }
-        ret += "Taille : ";
-        if(!this->taille)
-        {
-            ret += "Petit \n";
-        }
-        else
-        {
-            ret += "Grand \n";
-        }
-        if(!this->trou)
-        {
-            ret += "Sans trou \n";
-        }
-        else
-        {
-            ret += "Trou \n";
-        }
-
-        return ret;
-    }
-    else
-    {
-        return "Pion inexistant";
-    }
-
 }
 
 bool Pion::operator==(Pion * pion) {

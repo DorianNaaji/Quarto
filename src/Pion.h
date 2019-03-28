@@ -31,9 +31,7 @@ public:
 
     void read();
 
-    const std::string &getLien_image() const;
-
-    std::string print();
+    const std::string & getLien_image() const;
 };
 
 
