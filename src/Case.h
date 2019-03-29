@@ -13,8 +13,6 @@ private:
 
     Pion * pion;
 
-    unsigned int ind_x, ind_y;
-
 public:
 
     Case();

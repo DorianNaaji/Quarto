@@ -17,7 +17,7 @@ private:
 
     int value;
 
-    unsigned int dept, ind_x, ind_y, ind_Pion;
+    unsigned int ind_x, ind_y, ind_Pion;
 
 public:
 

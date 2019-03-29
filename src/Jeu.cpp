@@ -22,7 +22,7 @@ void Jeu::init() {
     std::string link;
     for (int i = 0; i < 16; i++) {
         k = i;
-        link = "../images/";
+        link = "";
         for (int j = 3; j >=0 ; --j) {
             if (k >= pow(2, j)) {
                 tab[j] = true;
@@ -80,8 +80,10 @@ void Jeu::menu() {
 
     //Initialisation de la font
     sf::Font font_titre, font_mode;
-    font_titre.loadFromFile("../fonts/PermanentMarker-regular.ttf");
-    font_mode.loadFromFile("../fonts/Ubuntu-regular.ttf");
+    if (!font_titre.loadFromFile("./fonts/PermanentMarker-regular.ttf"))
+        font_titre.loadFromFile("../fonts/PermanentMarker-regular.ttf");
+    if (!font_mode.loadFromFile("./fonts/Ubuntu-regular.ttf"))
+        font_mode.loadFromFile("../fonts/Ubuntu-regular.ttf");
 
     //Création du texte
     sf::Text name;
@@ -203,8 +205,10 @@ void Jeu::resultat(const std::string & message) {
 
     //Initialisation de la font
     sf::Font font_titre, font_mode;
-    font_titre.loadFromFile("../fonts/PermanentMarker-regular.ttf");
-    font_mode.loadFromFile("../fonts/Ubuntu-regular.ttf");
+    if (!font_titre.loadFromFile("./fonts/PermanentMarker-regular.ttf"))
+        font_titre.loadFromFile("../fonts/PermanentMarker-regular.ttf");
+    if (!font_mode.loadFromFile("./fonts/Ubuntu-regular.ttf"))
+        font_mode.loadFromFile("../fonts/Ubuntu-regular.ttf");
 
     //Création du texte
     sf::Text titre;
@@ -299,7 +303,8 @@ void Jeu::pvp() {
     // création texte explicatif
     sf::Text text;
     sf::Font font;
-    font.loadFromFile("../fonts/Ubuntu-Regular.ttf");
+    if (!font.loadFromFile("../fonts/Ubuntu-Regular.ttf"))
+        font.loadFromFile("./fonts/Ubuntu-Regular.ttf");
     text.setFont(font);
     text.setFillColor(sf::Color::Black);
     text.setCharacterSize(50);
@@ -328,7 +333,8 @@ void Jeu::pvp() {
         rect.setOutlineThickness(5.f);
         rect.setOutlineColor(sf::Color::Transparent);
 
-        texture->loadFromFile(this->tabPion[i].getLien_image(), sf::IntRect(0, 0, 400, 400));
+        if (!texture->loadFromFile("../images/"+this->tabPion[i].getLien_image(), sf::IntRect(0, 0, 400, 400)))
+            texture->loadFromFile("./images/"+this->tabPion[i].getLien_image(), sf::IntRect(0, 0, 400, 400));
 
         texture->setSmooth(true);
 
@@ -459,7 +465,8 @@ void Jeu::IA_alpha_beta() {
         rect.setOutlineThickness(5.f);
         rect.setOutlineColor(sf::Color::Transparent);
 
-        texture->loadFromFile(this->tabPion[i].getLien_image(), sf::IntRect(0, 0, 400, 400));
+        if (!texture->loadFromFile("../images/"+this->tabPion[i].getLien_image(), sf::IntRect(0, 0, 400, 400)))
+            texture->loadFromFile("./images/"+this->tabPion[i].getLien_image(), sf::IntRect(0, 0, 400, 400));
 
         texture->setSmooth(true);
 
