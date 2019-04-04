@@ -61,3 +61,45 @@ const std::string &Pion::getLien_image() const {
     return lien_image;
 }
 
+std::string Pion::toString()
+{
+   std::string res;
+   if(this->couleur)
+   {
+       res += "Bleu, ";
+   }
+   else
+   {
+       res += "Rouge, ";
+   }
+
+   if(this->forme)
+   {
+       res += "Carré, ";
+   }
+   else
+   {
+       res += "Rond, ";
+   }
+
+   if(this->taille)
+   {
+       res += "Grand, ";
+   }
+   else
+   {
+       res += "Petit, ";
+   }
+
+   if(this->trou)
+   {
+       res += "Troué.";
+   }
+   else
+   {
+       res += "Non troué.";
+   }
+
+   return res;
+}
+

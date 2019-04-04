@@ -35,39 +35,58 @@ void Grille::setCase(unsigned int x, unsigned int y, Pion * p) {
  */
 bool Grille::horizontalWin()
 {
-    for(unsigned int i = 0; i < this->dimY; i++)
-    {
-        //bool monT = this->getCase(0, 0).getPion()->equals(this->getCase(1, 0).getPion());
 
-        if(this->getCase(0, i).getPion()->equals(this->getCase(1, i).getPion())
-        &&  this->getCase(0, i).getPion()->equals(this->getCase(2, i).getPion())
-        &&  this->getCase(0, i).getPion()->equals(this->getCase(3, i).getPion())
-        &&  this->getCase(0, i).getPion() != nullptr)
-        {
-            return true;
-        }
-    }
+    // EN COURS
+    //todo
     return false;
 }
 
 /**
- *
+*  L'algo compare le pion d'une colonne à son extrémité supérieure avec tous les autres.
+*  Si le pion est similaire avec tous les autres, on incrémente un compteur de 1
+*  Il y a donc 16 vérifications de correspondance de pion en tout. Si les 16 vérifications passent, on retourne vrai
+*  En effet, on compare chaque pion à lui-même et aux 3 autres : Si un pion possède une caractéristique
+*  en commun avec lui-même et les 3 autres de la même colonne,
+*  nbVerificationsOK vaut 4, puis au prochain tour de boucle, on vérifie si le pion juste en dessous est possède
+*  une caractéristique en commun avec lui-même et les 3 autres de la colonne et ainsi de suite,
+*  jusqu'à avoir vérifié tous les pions de cette manière.
+*  En vérifiant tous les pions de cette manière, on a donc au final 16 passages dans la conditionnelles
+*  si les pions possèdent une caractéristiques en commun.
  * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
  * @return bool : gagné (true) ou non (false) à la verticale
  */
 bool Grille::verticalWin()
 {
-    for(unsigned int i = 0; i < this->dimX; i++)
+
+    unsigned int i;
+    unsigned int j;
+    unsigned int k;
+    unsigned int nbVerificationsOK = 0;
+
+    //On parcourt les colonnes
+    for(i = 0; i < this->dimX; i++)
     {
-        if( this->getCase(i, 0).getPion()->equals(this->getCase(i, 1).getPion())
-        && this->getCase(i, 0).getPion()->equals(this->getCase(i, 2).getPion())
-        && this->getCase(i, 0).getPion()->equals(this->getCase(i, 3).getPion()))
+        //on reset le nombre de pions similaires car on change de colonne à la ième itération
+        nbVerificationsOK = 0;
+        // on parcourt les lignes une à une
+        for(j = 0; j < this->dimX; j++)
         {
-            return true;
+            //on re-parcourt les lignes une à une
+            for(k = 0; k < this->dimX; k++)
+            {
+                // si le pion courant (i, j) possède les mêmes caractéristiques que les 3 autres pions (i, k) dont lui-même
+                if (this->getCase(i, j).getPion()->equals(this->getCase(i, k).getPion()))
+                {
+                    // on incrémente notre compteur
+                    nbVerificationsOK++;
+                }
+            }
         }
     }
-    return false;
+    // Si les 16 vérifications sont OK
+    return (nbVerificationsOK == 16);
 }
+
 
 /**
  *
@@ -89,13 +108,16 @@ bool Grille::diagonalWin()
     // alignés et retourne si il est égal à 4 en fin de fonction.
     for(i = 0, j = 0; j < this->dimX; i++, j++)
     {
-        if ((this->getCase(i, j).getPion()->equals(this->getCase(0, 0).getPion()))
+        if
+        (
+               (this->getCase(i, j).getPion()->equals(this->getCase(0, 0).getPion()))
             && (this->getCase(i, j).getPion()->equals(this->getCase(1, 1).getPion()))
             && (this->getCase(i, j).getPion()->equals(this->getCase(2, 2).getPion()))
-            && (this->getCase(i, j).getPion()->equals(this->getCase(3, 3).getPion()))) {
-
+            && (this->getCase(i, j).getPion()->equals(this->getCase(3, 3).getPion()))
+        )
+        {
              nbPionsSimilaires++;
-         }
+        }
     }
     return (nbPionsSimilaires == 4);
 }
@@ -254,4 +276,68 @@ int Grille::heuristicValue() {
     if (value > bestValue) bestValue = value;
 
     return bestValue;
+}
+
+
+bool Grille::win(Motif motif)
+{
+    switch(motif)
+    {
+        case BATON:
+            return this->batonWin();
+            break;
+        case L_NORMAL:
+            return this->l_normalWin();
+            break;
+        case L_INVERSE:
+            return this->l_inverseWin();
+            break;
+        case BLOC:
+            return this->blocWin();
+            break;
+        case BIAIS_NORMAL:
+            return this->biais_normalWin();
+            break;
+        case T:
+            return this->tWin();
+            break;
+        case BIAIS_INVERSE:
+            return this->biais_inverseWin();
+            break;
+    }
+}
+
+bool Grille::batonWin()
+{
+    return this->horizontalWin();
+}
+
+bool Grille::l_normalWin()
+{
+
+}
+
+bool Grille::l_inverseWin()
+{
+
+}
+
+bool Grille::blocWin()
+{
+
+}
+
+bool Grille::biais_normalWin()
+{
+
+}
+
+bool Grille::tWin()
+{
+
+}
+
+bool Grille::biais_inverseWin()
+{
+
 }

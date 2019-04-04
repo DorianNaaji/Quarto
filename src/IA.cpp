@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "IA.h"
+#include <limits>
 
 void IA::remplirArbre(Grille g, int dept, int deptFin, std::vector<Pion> &tabPion, Pion * pionDepart = nullptr) {
     this->grid = g;

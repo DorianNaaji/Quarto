@@ -6,6 +6,7 @@
 #include <math.h>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "IA.h"
 
 Jeu::Jeu() = default;
 
@@ -505,8 +506,7 @@ void Jeu::IA_alpha_beta() {
                             ia->remplirArbre(*g, 0, 2, tabPion, &tabPion[ind_pion]);
                             std::cout<<"Creation arbre... ok!"<<std::endl;
                             std::cout<<"Selection case..."<<std::endl;
-                            ia->alphaBeta(ind_x, ind_y, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour,
-                                          true);
+                            ia->alphaBeta(ind_x, ind_y, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour, true);
                             std::cout<<"Selection case... ok!"<<std::endl;
                             std::cout<<ind_x<<" | "<<ind_y<<std::endl;
 
@@ -523,8 +523,7 @@ void Jeu::IA_alpha_beta() {
                              * Select pion
                              */
 
-                            ia->selectPion(ind_pion, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour,
-                                           false);
+                            ia->selectPion(ind_pion, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour, false);
 
                             openGrille[ind_pion].setOutlineColor(sf::Color::Red);
 

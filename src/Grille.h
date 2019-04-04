@@ -3,6 +3,7 @@
 
 
 #include "Case.h"
+#include "Motif.h"
 
 class Grille {
 private:
@@ -46,6 +47,22 @@ public:
     int heuristicValueAntiDiagonal();
 
     int heuristicValue();
+
+    bool win(Motif motif);
+
+    bool batonWin();
+
+    bool l_normalWin();
+
+    bool l_inverseWin();
+
+    bool blocWin();
+
+    bool biais_normalWin();
+
+    bool tWin();
+
+    bool biais_inverseWin();
 };
 
 

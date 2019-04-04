@@ -32,6 +32,8 @@ public:
     void read();
 
     const std::string & getLien_image() const;
+
+    std::string toString();
 };
 
 
