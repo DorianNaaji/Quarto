@@ -7,6 +7,7 @@
 
 enum Motif
 {
+    NONE,
     BATON, // ----
     L_NORMAL, // |___
     L_INVERSE, // ___|

@@ -30,7 +30,13 @@ void Grille::setCase(unsigned int x, unsigned int y, Pion * p) {
 }
 
 /**
- *
+ * //TODO
+ * PROBLEME : NE FONCTIONNE PAS
+ * Tous ls pions, pris un à un, ont bien une caractéristiques en commun avec tous les autres
+ * Mais les 4 pièces prises dans leur ensemble n'auront pas forcément toutes une caractéristiques en commun :
+ * Ex avec un carré petit bleu, un cercle grand rouge, un cercle petit troué rouge et un carré petit troué rouge
+ * cf doc pour verticalWin
+ * @see bool Grille::verticalWin()
  * @return bool : gagné (true) ou non (false) à l'horizontale
  */
 bool Grille::horizontalWin()

@@ -19,6 +19,8 @@ private:
     std::string J1, J2;
     std::vector<Pion> tabPion;
     IA * ia;
+    void choixPieces(bool pvp);
+    Motif _motif = NONE;
 
 public:
 
