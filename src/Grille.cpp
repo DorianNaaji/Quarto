@@ -35,9 +35,40 @@ void Grille::setCase(unsigned int x, unsigned int y, Pion * p) {
  */
 bool Grille::horizontalWin()
 {
+    unsigned int i;
+    unsigned int j;
+    unsigned int k;
+    unsigned int nbVerificationsOK = 0;
 
-    // EN COURS
-    //todo
+    //On parcourt les lignes
+    for(i = 0; i < this->dimX; i++)
+    {
+        // on reset le compteurs de verif car on change de ligne à la i-ème itération
+        nbVerificationsOK = 0;
+        // on parcourt les colonnes une à une
+        for(j = 0; j < this->dimX; j++)
+        {
+            //on re-parcourt les colonnes, ce qui permet de parcourir les pions un à un
+            for(k = 0; k < this->dimX; k++)
+            {
+               //std::cout << j << "," << i << " --> " << k << "," << i << std::endl;
+                // si le pion courant (j, i) possède les mêmes caractéristiques que les 3 autres pions (k, i) dont lui-même
+                if (this->getCase(j, i).getPion()->equals(this->getCase(k, i).getPion()))
+                {
+                    // on incrémente notre compteur
+                    nbVerificationsOK++;
+                    std::cout << nbVerificationsOK << std::endl;
+                }
+            }
+        }
+        // Si les 16 vérifications sont OK
+        if(nbVerificationsOK == 16)
+        {
+            //std::cout<<"horizontal"<<std::endl;
+            return true;
+        }
+    }
+    // Si les 16 vérifications sont OK
     return false;
 }
 
@@ -57,7 +88,6 @@ bool Grille::horizontalWin()
  */
 bool Grille::verticalWin()
 {
-
     unsigned int i;
     unsigned int j;
     unsigned int k;
@@ -66,7 +96,7 @@ bool Grille::verticalWin()
     //On parcourt les colonnes
     for(i = 0; i < this->dimX; i++)
     {
-        //on reset le nombre de pions similaires car on change de colonne à la ième itération
+        // on reset le nombre de pions similaires car on change de colonne à la ième itération
         nbVerificationsOK = 0;
         // on parcourt les lignes une à une
         for(j = 0; j < this->dimX; j++)
@@ -82,71 +112,66 @@ bool Grille::verticalWin()
                 }
             }
         }
+        // Si les 16 vérifications sont OK
+        if(nbVerificationsOK == 16)
+        {
+            //std::cout<<"vertical"<<std::endl;
+            return true;
+        }
     }
-    // Si les 16 vérifications sont OK
-    return (nbVerificationsOK == 16);
+    return false;
 }
 
 
 /**
  *
- * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
+ * Compare chaque pion de la diagonale avec tous les autres
  * @return bool : gagné (true) ou non (false) avec la diagonale
  */
 bool Grille::diagonalWin()
 {
     unsigned int i;
     unsigned int j;
-    int nbPionsSimilaires = 0;
+    unsigned int nbVerificationsOK = 0;
 
-    // va faire des vérifications parfois déjà faites ou dont on pourrait se passer
-    // durant un tour de boucle mais
-    // assure que les 4 pions alignés sur la diagonale ont bien tous des caractéristiques
-    // en commun : Le pion en (0,0) va être comparé à tous les autres & lui-même,
-    // Le pion en (1,1) également, puis celui en (2,2) et en (3,3).
-    // La fonction utilise un compteur @see nbPionsSimilaires qui compte le nombre de pions
-    // alignés et retourne si il est égal à 4 en fin de fonction.
-    for(i = 0, j = 0; j < this->dimX; i++, j++)
+    for(i = 0; i < this->dimX; i++)
     {
-        if
-        (
-               (this->getCase(i, j).getPion()->equals(this->getCase(0, 0).getPion()))
-            && (this->getCase(i, j).getPion()->equals(this->getCase(1, 1).getPion()))
-            && (this->getCase(i, j).getPion()->equals(this->getCase(2, 2).getPion()))
-            && (this->getCase(i, j).getPion()->equals(this->getCase(3, 3).getPion()))
-        )
+        for(j = 0; j < this->dimX; j++)
         {
-             nbPionsSimilaires++;
+            if(this->getCase(i,i).getPion()->equals(this->getCase(j,j).getPion()))
+            {
+                nbVerificationsOK++;
+            }
         }
     }
-    return (nbPionsSimilaires == 4);
+    return (nbVerificationsOK == 16);
+
 }
 
 /**
  *
+ * Compare chaque pion de la diagonale inverse avec tous les autres
  * @return bool : gagné (true) ou non (false) avec la diagonale inverse
  */
 bool Grille::reverseDiagonalWin()
 {
     unsigned int i;
     unsigned int j;
-    int nbPionsSimilaires = 0;
+    unsigned int k;
+    unsigned int l;
+    unsigned int nbVerificationsOK = 0;
 
     for(i = 0, j = 3; (i < this->dimX) && (j >= 0); i++, j--)
     {
-
-        if
-        (
-            (this->getCase(i, j).getPion()->equals(this->getCase(0, 3).getPion())
-             && this->getCase(i, j).getPion()->equals(this->getCase(1, 2).getPion())
-             && this->getCase(i, j).getPion()->equals(this->getCase(2, 1).getPion())
-             && this->getCase(i, j).getPion()->equals(this->getCase(3, 0).getPion()))
-        )
+        for(k = 0, l = 3; (k < this->dimX) && (l >= 0); k++, l--)
         {
-            nbPionsSimilaires++;
+            if(this->getCase(i, j).getPion()->equals(this->getCase(k, l).getPion()))
+            {
+                nbVerificationsOK++;
+            }
         }
     }
-    return (nbPionsSimilaires == 4);
+    return (nbVerificationsOK == 16);
 }
 
 /**
