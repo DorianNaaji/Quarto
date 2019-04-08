@@ -30,98 +30,69 @@ void Grille::setCase(unsigned int x, unsigned int y, Pion * p) {
 }
 
 /**
- * //TODO
- * PROBLEME : NE FONCTIONNE PAS
- * Tous ls pions, pris un à un, ont bien une caractéristiques en commun avec tous les autres
- * Mais les 4 pièces prises dans leur ensemble n'auront pas forcément toutes une caractéristiques en commun :
- * Ex avec un carré petit bleu, un cercle grand rouge, un cercle petit troué rouge et un carré petit troué rouge
- * cf doc pour verticalWin
- * @see bool Grille::verticalWin()
- * @return bool : gagné (true) ou non (false) à l'horizontale
+ *
+ * @param pions A 4-sized vector containing pions
+ * @return true if the "pions" have one common characteristic. False otherwise
  */
-bool Grille::horizontalWin()
+bool Grille::haveOneCommonCharacteristic(std::vector<Pion*> pions)
 {
-    unsigned int i;
-    unsigned int j;
-    unsigned int k;
-    unsigned int nbVerificationsOK = 0;
+    bool canCheck = true;
 
-    //On parcourt les lignes
-    for(i = 0; i < this->dimX; i++)
+    // making sure there's no nulls pions before checking their characteristics
+    for(int i = 0; i < 4; i ++)
     {
-        // on reset le compteurs de verif car on change de ligne à la i-ème itération
-        nbVerificationsOK = 0;
-        // on parcourt les colonnes une à une
-        for(j = 0; j < this->dimX; j++)
+        if(pions.at(i) == nullptr)
         {
-            //on re-parcourt les colonnes, ce qui permet de parcourir les pions un à un
-            for(k = 0; k < this->dimX; k++)
-            {
-               //std::cout << j << "," << i << " --> " << k << "," << i << std::endl;
-                // si le pion courant (j, i) possède les mêmes caractéristiques que les 3 autres pions (k, i) dont lui-même
-                if (this->getCase(j, i).getPion()->equals(this->getCase(k, i).getPion()))
-                {
-                    // on incrémente notre compteur
-                    nbVerificationsOK++;
-                    std::cout << nbVerificationsOK << std::endl;
-                }
-            }
+            canCheck = false;
         }
-        // Si les 16 vérifications sont OK
-        if(nbVerificationsOK == 16)
+    }
+    if(canCheck)
+    {
+        if
+        (
+            // les pions ont tous un trou
+            ((pions.at(0)->getTrou()) && (pions.at(1)->getTrou()) && (pions.at(2)->getTrou()) && (pions.at(3)->getTrou()))
+            // les pions n'ont pas de trou
+            ||  (!(pions.at(0)->getTrou()) && !(pions.at(1)->getTrou()) && !(pions.at(2)->getTrou()) && !(pions.at(3)->getTrou()))
+            // les pions sont bleu
+            ||  ((pions.at(0)->getCouleur()) && (pions.at(1)->getCouleur()) && (pions.at(2)->getCouleur()) && (pions.at(3)->getCouleur()))
+            // les pions sont rouges
+            ||  (!(pions.at(0)->getCouleur()) && !(pions.at(1)->getCouleur()) && !(pions.at(2)->getCouleur()) && !(pions.at(3)->getCouleur()))
+            // les pions sont rectangulaires
+            ||  ((pions.at(0)->getForme()) && (pions.at(1)->getForme()) && (pions.at(2)->getForme()) && (pions.at(3)->getForme()))
+            // les pions sont ronds
+            ||  (!(pions.at(0)->getForme()) && !(pions.at(1)->getForme()) && !(pions.at(2)->getForme()) && !(pions.at(3)->getForme()))
+            // les pions sont grands
+            ||  ((pions.at(0)->getTaille()) && (pions.at(1)->getTaille()) && (pions.at(2)->getTaille()) && (pions.at(3)->getTaille()))
+            // les pions sont petits
+            ||  (!(pions.at(0)->getTaille()) && !(pions.at(1)->getTaille()) && !(pions.at(2)->getTaille()) && !(pions.at(3)->getTaille()))
+        )
         {
-            //std::cout<<"horizontal"<<std::endl;
             return true;
         }
     }
-    // Si les 16 vérifications sont OK
-    return false;
+    else
+    {
+        return false;
+    }
 }
 
-/**
-*  L'algo compare le pion d'une colonne à son extrémité supérieure avec tous les autres.
-*  Si le pion est similaire avec tous les autres, on incrémente un compteur de 1
-*  Il y a donc 16 vérifications de correspondance de pion en tout. Si les 16 vérifications passent, on retourne vrai
-*  En effet, on compare chaque pion à lui-même et aux 3 autres : Si un pion possède une caractéristique
-*  en commun avec lui-même et les 3 autres de la même colonne,
-*  nbVerificationsOK vaut 4, puis au prochain tour de boucle, on vérifie si le pion juste en dessous est possède
-*  une caractéristique en commun avec lui-même et les 3 autres de la colonne et ainsi de suite,
-*  jusqu'à avoir vérifié tous les pions de cette manière.
-*  En vérifiant tous les pions de cette manière, on a donc au final 16 passages dans la conditionnelles
-*  si les pions possèdent une caractéristiques en commun.
- * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
- * @return bool : gagné (true) ou non (false) à la verticale
- */
-bool Grille::verticalWin()
-{
-    unsigned int i;
-    unsigned int j;
-    unsigned int k;
-    unsigned int nbVerificationsOK = 0;
 
-    //On parcourt les colonnes
-    for(i = 0; i < this->dimX; i++)
+bool Grille::horizontalOrVerticalWin()
+{
+    std::vector<Pion*> horizontalPions;
+    std::vector<Pion*> verticalPions;
+    for(unsigned int i = 0; i < this->dimX; i++)
     {
-        // on reset le nombre de pions similaires car on change de colonne à la ième itération
-        nbVerificationsOK = 0;
-        // on parcourt les lignes une à une
-        for(j = 0; j < this->dimX; j++)
+        horizontalPions.clear();
+        verticalPions.clear();
+        for(unsigned int j = 0; j < this->dimX; j++)
         {
-            //on re-parcourt les lignes une à une
-            for(k = 0; k < this->dimX; k++)
-            {
-                // si le pion courant (i, j) possède les mêmes caractéristiques que les 3 autres pions (i, k) dont lui-même
-                if (this->getCase(i, j).getPion()->equals(this->getCase(i, k).getPion()))
-                {
-                    // on incrémente notre compteur
-                    nbVerificationsOK++;
-                }
-            }
+            verticalPions.push_back(this->getCase(i, j).getPion());
+            horizontalPions.push_back(this->getCase(j, i).getPion());
         }
-        // Si les 16 vérifications sont OK
-        if(nbVerificationsOK == 16)
+        if(this->haveOneCommonCharacteristic(horizontalPions) || this->haveOneCommonCharacteristic(verticalPions))
         {
-            //std::cout<<"vertical"<<std::endl;
             return true;
         }
     }
@@ -129,55 +100,30 @@ bool Grille::verticalWin()
 }
 
 
-/**
- *
- * Compare chaque pion de la diagonale avec tous les autres
- * @return bool : gagné (true) ou non (false) avec la diagonale
- */
-bool Grille::diagonalWin()
-{
-    unsigned int i;
-    unsigned int j;
-    unsigned int nbVerificationsOK = 0;
-
-    for(i = 0; i < this->dimX; i++)
-    {
-        for(j = 0; j < this->dimX; j++)
-        {
-            if(this->getCase(i,i).getPion()->equals(this->getCase(j,j).getPion()))
-            {
-                nbVerificationsOK++;
-            }
-        }
-    }
-    return (nbVerificationsOK == 16);
-
-}
 
 /**
  *
- * Compare chaque pion de la diagonale inverse avec tous les autres
- * @return bool : gagné (true) ou non (false) avec la diagonale inverse
+ * @return bool : gagné (true) ou non (false) avec la diagonale ou diagonale inverse
  */
-bool Grille::reverseDiagonalWin()
+bool Grille::diagonalOrReverseDiagonalWin()
 {
     unsigned int i;
     unsigned int j;
-    unsigned int k;
-    unsigned int l;
-    unsigned int nbVerificationsOK = 0;
-
+    std::vector<Pion*> diagonalPions;
+    std::vector<Pion*> reverseDiagonalPions;
     for(i = 0, j = 3; (i < this->dimX) && (j >= 0); i++, j--)
     {
-        for(k = 0, l = 3; (k < this->dimX) && (l >= 0); k++, l--)
-        {
-            if(this->getCase(i, j).getPion()->equals(this->getCase(k, l).getPion()))
-            {
-                nbVerificationsOK++;
-            }
-        }
+        diagonalPions.push_back(this->getCase(i, j).getPion());
+        reverseDiagonalPions.push_back(this->getCase(i, i).getPion());
     }
-    return (nbVerificationsOK == 16);
+    if(this->haveOneCommonCharacteristic(diagonalPions) || this->haveOneCommonCharacteristic(reverseDiagonalPions))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 /**
@@ -187,13 +133,7 @@ bool Grille::reverseDiagonalWin()
  */
 bool Grille::win()
 {
-    return
-    (
-        (this->horizontalWin())
-        || (this->verticalWin())
-        || (this->diagonalWin())
-        || (this->reverseDiagonalWin())
-    );
+    return ( (this->horizontalOrVerticalWin()) || this->diagonalOrReverseDiagonalWin() );
 }
 
 bool Grille::full() {
@@ -340,7 +280,7 @@ bool Grille::win(Motif motif)
 
 bool Grille::batonWin()
 {
-    return this->horizontalWin();
+    return this->horizontalOrVerticalWin();
 }
 
 bool Grille::l_normalWin()

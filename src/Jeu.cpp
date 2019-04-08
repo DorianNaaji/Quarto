@@ -136,7 +136,7 @@ void Jeu::choixPieces(bool pvp)
         //rect.setFillColor(sf::Color::Magenta);
         rect.setPosition(20+180*i, 550);
         //rect.setOutlineThickness(5.f);
-        rect.setOutlineColor(sf::Color::Red);
+        //rect.setOutlineColor(sf::Color::Red);
 
         // we load the texture
         if (!texture->loadFromFile("../images/" + std::to_string(i) + ".png", sf::IntRect(0, 0, 200, 150)))
@@ -217,7 +217,6 @@ void Jeu::choixPieces(bool pvp)
                             )
                             {
                                 //open window according to the clicked tetris' shape
-                                //todo
                                 switch(i)
                                 {
                                     case 0:
@@ -242,10 +241,17 @@ void Jeu::choixPieces(bool pvp)
                                         this->_motif = BIAIS_INVERSE;
                                         break;
                                 }
-                                std::cout << this->_motif << std::endl;
-                                window.close();
-                                this->init();
-                                this->pvp();
+                                //std::cout << this->_motif << std::endl;
+                                if(pvp)
+                                {
+                                    window.close();
+                                    this->init();
+                                    this->pvp();
+                                }
+                                else
+                                {
+                                    // ia en fonction des règles choisies ici ?
+                                }
                             }
                         }
                     }
@@ -272,6 +278,7 @@ void Jeu::choixPieces(bool pvp)
 }
 
 void Jeu::menu() {
+    this->_motif = NONE;
     bool pvpActivated = false;
     unsigned int largeur = 1350, hauteur = 800;
     // création de la fenêtre
@@ -361,7 +368,10 @@ void Jeu::menu() {
                              * cas joueur vs IA (Alpha-beta)
                              */
                             window.close();
-                            this->choixPieces(pvpActivated);
+
+                            //this->choixPieces(pvpActivated); //(if IA is made for tetris patterns)
+                            this->init();
+                            this->IA_alpha_beta();
 
                         }else if (sf::Mouse::getPosition(window).x >= ((largeur-quit.getLocalBounds().width)/2)
                                   && sf::Mouse::getPosition(window).x <= ((largeur+quit.getLocalBounds().width)/2)
@@ -511,6 +521,13 @@ void Jeu::pvp() {
     text.setString(infoTourJ1);
     text.setPosition(700, 20);
 
+    sf::Text chosenPatternDetails;
+    chosenPatternDetails.setFont(font);
+    chosenPatternDetails.setFillColor(sf::Color::Black);
+    chosenPatternDetails.setCharacterSize(50);
+    chosenPatternDetails.setPosition(700, 180);
+    chosenPatternDetails.setString("Motif choisi :");
+
     std::vector<sf::RectangleShape> grille;
 
     for (int i = 0; i < 16; ++i) {
@@ -541,6 +558,29 @@ void Jeu::pvp() {
         rect.setTexture(texture);
 
         openGrille.push_back(rect);
+    }
+
+    sf::RectangleShape chosenPattern;
+    if(this->_motif != -1)
+    {
+        sf::Texture* tetrisTexture = new sf::Texture;
+        sf::RectangleShape rect(sf::Vector2f(200.f, 150.f));
+
+        rect.setPosition(1000, 135);
+        //rect.setOutlineColor(sf::Color::Red);
+        //rect.setOutlineThickness(5.f);
+        //rect.setFillColor(sf::Color::Magenta);
+
+        // we load the texture
+        if (!tetrisTexture->loadFromFile("../images/" + std::to_string(this->_motif) + ".png", sf::IntRect(0, 0, 200, 150)))
+        {
+            tetrisTexture->loadFromFile("./images/" + std::to_string(this->_motif) + ".png", sf::IntRect(0, 0, 200, 150));
+        }
+        // we smooth the texture
+        tetrisTexture->setSmooth(true);
+        // we set the texture to the rectangle
+        rect.setTexture(tetrisTexture);
+        chosenPattern = rect;
     }
 
     sf::Event event{};
@@ -622,6 +662,11 @@ void Jeu::pvp() {
         // window.draw(...);
 
         window.draw(text);
+        if(this->_motif != -1)
+        {
+            window.draw(chosenPatternDetails);
+            window.draw(chosenPattern);
+        }
 
         for (sf::RectangleShape  & child : grille) {
             window.draw(child);

@@ -7,14 +7,14 @@
 
 enum Motif
 {
-    NONE,
-    BATON, // ----
-    L_NORMAL, // |___
-    L_INVERSE, // ___|
-    BLOC, // []
-    BIAIS_NORMAL, // __--
-    T, // --|--
-    BIAIS_INVERSE // --__
+    NONE = -1,
+    BATON = 0, // ----
+    L_NORMAL = 1, // |___
+    L_INVERSE = 2, // ___|
+    BLOC = 3, // []
+    BIAIS_NORMAL = 4, // __--
+    T = 5, // --|--
+    BIAIS_INVERSE = 6 // --__
 };
 
 #endif //QUARTO_MOTIF_H

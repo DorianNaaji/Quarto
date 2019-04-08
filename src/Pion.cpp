@@ -41,17 +41,6 @@ bool Pion::equals(Pion * pion)
     return false;
 }
 
-bool Pion::operator==(Pion * pion) {
-    return( (this->couleur == pion->couleur)
-            && (this->forme == pion->forme)
-            && (this->taille == pion->taille)
-            && (this->trou == pion->trou) );
-}
-
-bool Pion::operator!=(Pion * pion) {
-    return !(this->equals(pion));
-}
-
 void Pion::read() {
     std::cout<<couleur<<" | "<<forme<<" | "<<taille<<" | "<<trou<<std::endl;
     std::cout<<lien_image<<std::endl;
@@ -99,7 +88,38 @@ std::string Pion::toString()
    {
        res += "Non troué.";
    }
-
    return res;
+}
+
+bool Pion::getForme() const
+{
+    if(this != nullptr)
+    {
+        return this->forme;
+    }
+}
+
+bool Pion::getTaille() const
+{
+    if(this != nullptr)
+    {
+        return this->taille;
+    }
+}
+
+bool Pion::getCouleur() const
+{
+    if(this != nullptr)
+    {
+        return this->couleur;
+    }
+}
+
+bool Pion::getTrou() const
+{
+    if(this != nullptr)
+    {
+        return this->trou;
+    }
 }
 
