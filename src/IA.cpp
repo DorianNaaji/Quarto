@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "IA.h"
+#include <limits>
 
 void IA::remplirArbre(Grille g, int dept, int deptFin, std::vector<Pion> &tabPion, Pion * pionDepart = nullptr) {
     this->grid = g;
@@ -22,7 +23,7 @@ void IA::remplirArbre(Grille g, int dept, int deptFin, std::vector<Pion> &tabPio
                         child->ind_x = i;
                         child->ind_y = j;
                         for (unsigned int k = 0; k < tabPion.size(); ++k) {
-                            if (tabPion[k] == pionDepart) {
+                            if (tabPion[k].equals(pionDepart)) {
                                 child->ind_Pion = k;
                                 tabPion.erase(tabPion.begin()+k);
                                 child->remplirArbre(tmp, dept+1, deptFin, tabPion);

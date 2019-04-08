@@ -23,15 +23,21 @@ public:
 
     Pion(bool f, bool ta, bool c, bool tr, std::string str);
 
-    bool equals(Pion *pion);
-
-    bool operator ==(Pion * pion);
-
-    bool operator !=(Pion * pion);
-
     void read();
 
     const std::string & getLien_image() const;
+
+    std::string toString();
+
+    bool equals(Pion * pion);
+
+    bool getForme() const;
+
+    bool getTaille() const;
+
+    bool getCouleur() const;
+
+    bool getTrou() const;
 };
 
 

@@ -6,6 +6,7 @@
 #include <math.h>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "IA.h"
 
 /**
  * TODO : clean texture and image wrong pathway when loading
@@ -79,7 +80,212 @@ void Jeu::selectCaseGrille(int mousseX, int mousseY, int & x, int & y) {
     }
 }
 
+
+/**
+ * Affichage la fenêtre de choix des pièces / des règles
+ * @param pvp : si la partie est pvp (true) ou non
+ */
+void Jeu::choixPieces(bool pvp)
+{
+    // creating the window
+    unsigned int width = 1350, length = 800;
+    sf::RenderWindow window(sf::VideoMode(width, length), "Choix des regles | Quarto", sf::Style::Titlebar | sf::Style::Close);
+
+    //loading some fonts
+    sf::Font titleFont, modeFont;
+    if (!titleFont.loadFromFile("./fonts/PermanentMarker-regular.ttf"))
+    {
+        titleFont.loadFromFile("../fonts/PermanentMarker-regular.ttf");
+    }
+    if (!modeFont.loadFromFile("./fonts/Ubuntu-regular.ttf"))
+    {
+        modeFont.loadFromFile("../fonts/Ubuntu-regular.ttf");
+    }
+
+    // title text
+    sf::Text title;
+    title.setFont(titleFont);
+    title.setString("Choix des regles");
+    title.setCharacterSize(150);
+    title.setPosition((width - title.getLocalBounds().width)/2, 10);
+    title.setFillColor(sf::Color::Red);
+
+    //game mode : classic text
+    sf::Text classic;
+    classic.setFont(modeFont);
+    classic.setString("Mode classique");
+    classic.setCharacterSize(75);
+    classic.setPosition((width - classic.getLocalBounds().width)/2, 225);
+    classic.setFillColor(sf::Color::White);
+
+    //game mode : tetris text
+    sf::Text tetris;
+    tetris.setFont(modeFont);
+    tetris.setString("Mode Tetris : Choisissez un motif ci-dessous");
+    tetris.setCharacterSize(50);
+    tetris.setPosition((width - tetris.getLocalBounds().width)/2, 450);
+    tetris.setFillColor(sf::Color::White);
+
+    //vector that will contain rectangle shapes that will themselves contain
+    std::vector<sf::RectangleShape> tetrisTextures;
+
+    // var for our textures
+    sf::Texture* texture;
+    // we have 7 textures (i from 0 to 7)
+    for (int i = 0; i < 7; ++i)
+    {
+        // we initialize the texture
+        texture = new sf::Texture;
+
+        // we create a rectangle of the size of our pngs
+        sf::RectangleShape rect(sf::Vector2f(200.f, 150.f));
+        //rect.setFillColor(sf::Color::Magenta);
+        rect.setPosition(20+180*i, 550);
+        //rect.setOutlineThickness(5.f);
+        //rect.setOutlineColor(sf::Color::Red);
+
+        // we load the texture
+        if (!texture->loadFromFile("../images/" + std::to_string(i) + ".png", sf::IntRect(0, 0, 200, 150)))
+        {
+            texture->loadFromFile("./images/" + std::to_string(i) + ".png", sf::IntRect(0, 0, 200, 150));
+        }
+        // we smooth the texture
+        texture->setSmooth(true);
+
+        // we set the texture to the rectangle
+        rect.setTexture(texture);
+        // we add the rectangle to our vector
+        tetrisTextures.push_back(rect);
+    }
+
+    // window treatment loop
+    while(window.isOpen())
+    {
+        sf::Event eventHandler{};
+
+        while (window.pollEvent(eventHandler))
+        {
+            // top right button
+            if(eventHandler.type == sf::Event::Closed)
+            {
+                //closes the window
+                window.close();
+            }
+            // mouse event
+            else if(eventHandler.type == sf::Event::MouseButtonPressed)
+            {
+                // left click
+                if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                {
+                    // classic mode
+                    if
+                    (
+                           (sf::Mouse::getPosition(window).x >= (width - classic.getLocalBounds().width)/2)
+                        && (sf::Mouse::getPosition(window).x <= (width + classic.getLocalBounds().width)/2)
+                        && (sf::Mouse::getPosition(window).y >= classic.getPosition().y)
+                        && (sf::Mouse::getPosition(window).y <= classic.getPosition().y + classic.getCharacterSize())
+                    )
+                    {
+                        // if pvp is set
+                        if(pvp)
+                        {
+                            window.close();
+                            this->init();
+                            this->pvp();
+                        }
+                        // else the user plays vs AI
+                        else
+                        {
+                            window.close();
+                            this->init();
+                            this->IA_alpha_beta();
+                        }
+
+                    }
+                    // tetris mode
+                    else
+                    {
+                        //std::cout << "x : " << sf::Mouse::getPosition(window).x << ", y : " << sf::Mouse::getPosition(window).y << std::endl;
+                        // iterating through or shapes
+                        for(int i = 0; i < 7; i++)
+                        {
+                            // current shape
+                            sf::RectangleShape shape = tetrisTextures.at(i);
+                            // if the click occurs in the shape's location
+                            if
+                            (
+                                    (sf::Mouse::getPosition(window).x > shape.getPosition().x)
+                                    // 180 = height
+                                &&  (sf::Mouse::getPosition(window).x < shape.getPosition().x + 180)
+                                &&  (sf::Mouse::getPosition(window).y > shape.getPosition().y)
+                                     // 200 = width
+                                &&  (sf::Mouse::getPosition(window).y < shape.getPosition().y + 200)
+                            )
+                            {
+                                //open window according to the clicked tetris' shape
+                                switch(i)
+                                {
+                                    case 0:
+                                        this->_motif = BATON;
+                                        break;
+                                    case 1:
+                                        this->_motif = L_NORMAL;
+                                        break;
+                                    case 2:
+                                        this->_motif = L_INVERSE;
+                                        break;
+                                    case 3:
+                                        this->_motif = BLOC;
+                                        break;
+                                    case 4:
+                                        this->_motif = BIAIS_NORMAL;
+                                        break;
+                                    case 5:
+                                        this->_motif = T;
+                                        break;
+                                    case 6:
+                                        this->_motif = BIAIS_INVERSE;
+                                        break;
+                                }
+                                //std::cout << this->_motif << std::endl;
+                                if(pvp)
+                                {
+                                    window.close();
+                                    this->init();
+                                    this->pvp();
+                                }
+                                else
+                                {
+                                    // ia en fonction des règles choisies ici ?
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // CLEARING, DRAWING, DISPLAYING
+        window.clear(sf::Color(100, 100, 120));
+        window.draw(title);
+        window.draw(classic);
+        window.draw(tetris);
+
+
+        for (sf::RectangleShape & rect : tetrisTextures)
+        {
+            window.draw(rect);
+        }
+
+        window.display();
+    }
+
+
+}
+
 void Jeu::menu() {
+    this->_motif = NONE;
+    bool pvpActivated = false;
     unsigned int largeur = 1350, hauteur = 800;
     // création de la fenêtre
     sf::RenderWindow window(sf::VideoMode(largeur, hauteur), "Mode de Jeu | Quarto", sf::Style::Titlebar | sf::Style::Close);
@@ -158,8 +364,8 @@ void Jeu::menu() {
                              * Cas ou on choisit le mode 2 joueurs
                              */
                             window.close();
-                            this->init();
-                            this->pvp();
+                            pvpActivated = true;
+                            this->choixPieces(pvpActivated);
                         }else if (sf::Mouse::getPosition(window).x >= ((largeur-ia1.getLocalBounds().width)/2)
                                   && sf::Mouse::getPosition(window).x <= ((largeur+ia1.getLocalBounds().width)/2)
                                   && sf::Mouse::getPosition(window).y >= ia1.getPosition().y
@@ -168,8 +374,11 @@ void Jeu::menu() {
                              * cas joueur vs IA (Alpha-beta)
                              */
                             window.close();
+
+                            //this->choixPieces(pvpActivated); //(if IA is made for tetris patterns)
                             this->init();
                             this->IA_alpha_beta();
+
                         }else if (sf::Mouse::getPosition(window).x >= ((largeur-quit.getLocalBounds().width)/2)
                                   && sf::Mouse::getPosition(window).x <= ((largeur+quit.getLocalBounds().width)/2)
                                   && sf::Mouse::getPosition(window).y >= quit.getPosition().y
@@ -295,6 +504,7 @@ void Jeu::resultat(const std::string & message) {
     }
 }
 
+
 void Jeu::pvp() {
     std::string infoTourJ1, infoTourJ2, joueur;
 
@@ -316,6 +526,13 @@ void Jeu::pvp() {
     text.setCharacterSize(50);
     text.setString(infoTourJ1);
     text.setPosition(700, 20);
+
+    sf::Text chosenPatternDetails;
+    chosenPatternDetails.setFont(font);
+    chosenPatternDetails.setFillColor(sf::Color::Black);
+    chosenPatternDetails.setCharacterSize(50);
+    chosenPatternDetails.setPosition(700, 180);
+    chosenPatternDetails.setString("Motif choisi :");
 
     std::vector<sf::RectangleShape> grille;
 
@@ -347,6 +564,29 @@ void Jeu::pvp() {
         rect.setTexture(texture);
 
         openGrille.push_back(rect);
+    }
+
+    sf::RectangleShape chosenPattern;
+    if(this->_motif != -1)
+    {
+        sf::Texture* tetrisTexture = new sf::Texture;
+        sf::RectangleShape rect(sf::Vector2f(200.f, 150.f));
+
+        rect.setPosition(1000, 135);
+        //rect.setOutlineColor(sf::Color::Red);
+        //rect.setOutlineThickness(5.f);
+        //rect.setFillColor(sf::Color::Magenta);
+
+        // we load the texture
+        if (!tetrisTexture->loadFromFile("../images/" + std::to_string(this->_motif) + ".png", sf::IntRect(0, 0, 200, 150)))
+        {
+            tetrisTexture->loadFromFile("./images/" + std::to_string(this->_motif) + ".png", sf::IntRect(0, 0, 200, 150));
+        }
+        // we smooth the texture
+        tetrisTexture->setSmooth(true);
+        // we set the texture to the rectangle
+        rect.setTexture(tetrisTexture);
+        chosenPattern = rect;
     }
 
     sf::Event event{};
@@ -390,13 +630,29 @@ void Jeu::pvp() {
 
                         //gestion des conditions de victoire
 
-                        if(this->g->win()) {
-                            window.close();
-                            this->resultat(joueur);
-                        } else if (this->g->full()) {
+                        // if the "motif" isnt set
+                        if(this->_motif == NONE)
+                        {
+                            if(this->g->win()) {
+                                window.close();
+                                this->resultat(joueur);
+                            }
+                        }
+                        // if the "motif" is set
+                        else if(this->_motif != NONE)
+                        {
+                            if(this->g->win(this->_motif))
+                            {
+                                window.close();
+                                this->resultat(joueur);
+                            }
+                        }
+                        // if the grid is full
+                        if (this->g->full()) {
                             window.close();
                             this->resultat("match nul");
                         }
+
                     }
                     break;
 
@@ -412,6 +668,11 @@ void Jeu::pvp() {
         // window.draw(...);
 
         window.draw(text);
+        if(this->_motif != -1)
+        {
+            window.draw(chosenPatternDetails);
+            window.draw(chosenPattern);
+        }
 
         for (sf::RectangleShape  & child : grille) {
             window.draw(child);
@@ -511,8 +772,7 @@ void Jeu::IA_alpha_beta() {
                             ia->remplirArbre(*g, 0, 2, tabPion, &tabPion[ind_pion]);
                             std::cout<<"Creation arbre... ok!"<<std::endl;
                             std::cout<<"Selection case..."<<std::endl;
-                            ia->alphaBeta(ind_x, ind_y, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour,
-                                          true);
+                            ia->alphaBeta(ind_x, ind_y, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour, true);
                             std::cout<<"Selection case... ok!"<<std::endl;
                             std::cout<<ind_x<<" | "<<ind_y<<std::endl;
 
@@ -529,8 +789,7 @@ void Jeu::IA_alpha_beta() {
                              * Select pion
                              */
 
-                            ia->selectPion(ind_pion, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour,
-                                           false);
+                            ia->selectPion(ind_pion, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour, false);
 
                             openGrille[ind_pion].setOutlineColor(sf::Color::Red);
 

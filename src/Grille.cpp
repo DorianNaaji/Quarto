@@ -31,100 +31,99 @@ void Grille::setCase(unsigned int x, unsigned int y, Pion * p) {
 
 /**
  *
- * @return bool : gagné (true) ou non (false) à l'horizontale
+ * @param pions A 4-sized vector containing pions
+ * @return true if the "pions" have one common characteristic. False otherwise
  */
-bool Grille::horizontalWin()
+bool Grille::haveOneCommonCharacteristic(std::vector<Pion*> pions)
 {
-    for(unsigned int i = 0; i < this->dimY; i++)
-    {
-        //bool monT = this->getCase(0, 0).getPion()->equals(this->getCase(1, 0).getPion());
+    bool canCheck = true;
 
-        if(this->getCase(0, i).getPion()->equals(this->getCase(1, i).getPion())
-        &&  this->getCase(0, i).getPion()->equals(this->getCase(2, i).getPion())
-        &&  this->getCase(0, i).getPion()->equals(this->getCase(3, i).getPion())
-        &&  this->getCase(0, i).getPion() != nullptr)
+    // making sure there's no nulls pions before checking their characteristics
+    for(int i = 0; i < 4; i ++)
+    {
+        if(pions.at(i) == nullptr)
         {
-            return true;
+            canCheck = false;
         }
     }
-    return false;
-}
-
-/**
- *
- * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
- * @return bool : gagné (true) ou non (false) à la verticale
- */
-bool Grille::verticalWin()
-{
-    for(unsigned int i = 0; i < this->dimX; i++)
+    if(canCheck)
     {
-        if( this->getCase(i, 0).getPion()->equals(this->getCase(i, 1).getPion())
-        && this->getCase(i, 0).getPion()->equals(this->getCase(i, 2).getPion())
-        && this->getCase(i, 0).getPion()->equals(this->getCase(i, 3).getPion()))
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-/**
- *
- * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
- * @return bool : gagné (true) ou non (false) avec la diagonale
- */
-bool Grille::diagonalWin()
-{
-    unsigned int i;
-    unsigned int j;
-    int nbPionsSimilaires = 0;
-
-    // va faire des vérifications parfois déjà faites ou dont on pourrait se passer
-    // durant un tour de boucle mais
-    // assure que les 4 pions alignés sur la diagonale ont bien tous des caractéristiques
-    // en commun : Le pion en (0,0) va être comparé à tous les autres & lui-même,
-    // Le pion en (1,1) également, puis celui en (2,2) et en (3,3).
-    // La fonction utilise un compteur @see nbPionsSimilaires qui compte le nombre de pions
-    // alignés et retourne si il est égal à 4 en fin de fonction.
-    for(i = 0, j = 0; j < this->dimX; i++, j++)
-    {
-        if ((this->getCase(i, j).getPion()->equals(this->getCase(0, 0).getPion()))
-            && (this->getCase(i, j).getPion()->equals(this->getCase(1, 1).getPion()))
-            && (this->getCase(i, j).getPion()->equals(this->getCase(2, 2).getPion()))
-            && (this->getCase(i, j).getPion()->equals(this->getCase(3, 3).getPion()))) {
-
-             nbPionsSimilaires++;
-         }
-    }
-    return (nbPionsSimilaires == 4);
-}
-
-/**
- *
- * @return bool : gagné (true) ou non (false) avec la diagonale inverse
- */
-bool Grille::reverseDiagonalWin()
-{
-    unsigned int i;
-    unsigned int j;
-    int nbPionsSimilaires = 0;
-
-    for(i = 0, j = 3; (i < this->dimX) && (j >= 0); i++, j--)
-    {
-
         if
         (
-            (this->getCase(i, j).getPion()->equals(this->getCase(0, 3).getPion())
-             && this->getCase(i, j).getPion()->equals(this->getCase(1, 2).getPion())
-             && this->getCase(i, j).getPion()->equals(this->getCase(2, 1).getPion())
-             && this->getCase(i, j).getPion()->equals(this->getCase(3, 0).getPion()))
+            // les pions ont tous un trou
+            ((pions.at(0)->getTrou()) && (pions.at(1)->getTrou()) && (pions.at(2)->getTrou()) && (pions.at(3)->getTrou()))
+            // les pions n'ont pas de trou
+            ||  (!(pions.at(0)->getTrou()) && !(pions.at(1)->getTrou()) && !(pions.at(2)->getTrou()) && !(pions.at(3)->getTrou()))
+            // les pions sont bleu
+            ||  ((pions.at(0)->getCouleur()) && (pions.at(1)->getCouleur()) && (pions.at(2)->getCouleur()) && (pions.at(3)->getCouleur()))
+            // les pions sont rouges
+            ||  (!(pions.at(0)->getCouleur()) && !(pions.at(1)->getCouleur()) && !(pions.at(2)->getCouleur()) && !(pions.at(3)->getCouleur()))
+            // les pions sont rectangulaires
+            ||  ((pions.at(0)->getForme()) && (pions.at(1)->getForme()) && (pions.at(2)->getForme()) && (pions.at(3)->getForme()))
+            // les pions sont ronds
+            ||  (!(pions.at(0)->getForme()) && !(pions.at(1)->getForme()) && !(pions.at(2)->getForme()) && !(pions.at(3)->getForme()))
+            // les pions sont grands
+            ||  ((pions.at(0)->getTaille()) && (pions.at(1)->getTaille()) && (pions.at(2)->getTaille()) && (pions.at(3)->getTaille()))
+            // les pions sont petits
+            ||  (!(pions.at(0)->getTaille()) && !(pions.at(1)->getTaille()) && !(pions.at(2)->getTaille()) && !(pions.at(3)->getTaille()))
         )
         {
-            nbPionsSimilaires++;
+            return true;
         }
     }
-    return (nbPionsSimilaires == 4);
+    else
+    {
+        return false;
+    }
+}
+
+
+bool Grille::horizontalOrVerticalWin()
+{
+    std::vector<Pion*> horizontalPions;
+    std::vector<Pion*> verticalPions;
+    for(unsigned int i = 0; i < this->dimX; i++)
+    {
+        horizontalPions.clear();
+        verticalPions.clear();
+        for(unsigned int j = 0; j < this->dimX; j++)
+        {
+            verticalPions.push_back(this->getCase(i, j).getPion());
+            horizontalPions.push_back(this->getCase(j, i).getPion());
+        }
+        if(this->haveOneCommonCharacteristic(horizontalPions) || this->haveOneCommonCharacteristic(verticalPions))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+/**
+ *
+ * @return bool : gagné (true) ou non (false) avec la diagonale ou diagonale inverse
+ */
+bool Grille::diagonalOrReverseDiagonalWin()
+{
+    unsigned int i;
+    unsigned int j;
+    std::vector<Pion*> diagonalPions;
+    std::vector<Pion*> reverseDiagonalPions;
+    for(i = 0, j = 3; (i < this->dimX) && (j >= 0); i++, j--)
+    {
+        diagonalPions.push_back(this->getCase(i, j).getPion());
+        reverseDiagonalPions.push_back(this->getCase(i, i).getPion());
+    }
+    if(this->haveOneCommonCharacteristic(diagonalPions) || this->haveOneCommonCharacteristic(reverseDiagonalPions))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 /**
@@ -134,13 +133,7 @@ bool Grille::reverseDiagonalWin()
  */
 bool Grille::win()
 {
-    return
-    (
-        (this->horizontalWin())
-        || (this->verticalWin())
-        || (this->diagonalWin())
-        || (this->reverseDiagonalWin())
-    );
+    return ( (this->horizontalOrVerticalWin()) || this->diagonalOrReverseDiagonalWin() );
 }
 
 bool Grille::full() {
@@ -254,4 +247,68 @@ int Grille::heuristicValue() {
     if (value > bestValue) bestValue = value;
 
     return bestValue;
+}
+
+
+bool Grille::win(Motif motif)
+{
+    switch(motif)
+    {
+        case BATON:
+            return this->batonWin();
+            break;
+        case L_NORMAL:
+            return this->l_normalWin();
+            break;
+        case L_INVERSE:
+            return this->l_inverseWin();
+            break;
+        case BLOC:
+            return this->blocWin();
+            break;
+        case BIAIS_NORMAL:
+            return this->biais_normalWin();
+            break;
+        case T:
+            return this->tWin();
+            break;
+        case BIAIS_INVERSE:
+            return this->biais_inverseWin();
+            break;
+    }
+}
+
+bool Grille::batonWin()
+{
+    return this->horizontalOrVerticalWin();
+}
+
+bool Grille::l_normalWin()
+{
+    //todo
+}
+
+bool Grille::l_inverseWin()
+{
+    //todo
+}
+
+bool Grille::blocWin()
+{
+    //todo
+}
+
+bool Grille::biais_normalWin()
+{
+    //todo
+}
+
+bool Grille::tWin()
+{
+    //todo
+}
+
+bool Grille::biais_inverseWin()
+{
+    //todo
 }

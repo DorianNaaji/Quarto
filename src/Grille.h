@@ -2,7 +2,9 @@
 #define MORPION_GRILLE_H
 
 
+#include <vector>
 #include "Case.h"
+#include "Motif.h"
 
 class Grille {
 private:
@@ -12,6 +14,26 @@ private:
     unsigned int dimX;
 
     unsigned int dimY;
+
+    bool haveOneCommonCharacteristic(std::vector<Pion*> pions);
+
+    bool batonWin();
+
+    bool l_normalWin();
+
+    bool l_inverseWin();
+
+    bool blocWin();
+
+    bool biais_normalWin();
+
+    bool tWin();
+
+    bool biais_inverseWin();
+
+    bool horizontalOrVerticalWin();
+
+    bool diagonalOrReverseDiagonalWin();
 
 public:
 
@@ -24,14 +46,6 @@ public:
     Case & getCase(unsigned int x, unsigned int y);
 
     void setCase(unsigned int x, unsigned int y, Pion * p);
-
-    bool horizontalWin();
-
-    bool verticalWin();
-
-    bool diagonalWin();
-
-    bool reverseDiagonalWin();
 
     bool win();
 
@@ -46,6 +60,10 @@ public:
     int heuristicValueAntiDiagonal();
 
     int heuristicValue();
+
+    bool win(Motif motif);
+
+
 };
 
 
