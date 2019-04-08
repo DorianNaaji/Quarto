@@ -7,7 +7,13 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-Jeu::Jeu() = default;
+/**
+ * TODO : clean texture and image wrong pathway when loading
+ */
+
+Jeu::Jeu() {
+    this->init();
+}
 
 void Jeu::init() {
     this->g = new Grille;
