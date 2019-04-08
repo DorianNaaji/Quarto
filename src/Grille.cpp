@@ -285,30 +285,30 @@ bool Grille::batonWin()
 
 bool Grille::l_normalWin()
 {
-
+    //todo
 }
 
 bool Grille::l_inverseWin()
 {
-
+    //todo
 }
 
 bool Grille::blocWin()
 {
-
+    //todo
 }
 
 bool Grille::biais_normalWin()
 {
-
+    //todo
 }
 
 bool Grille::tWin()
 {
-
+    //todo
 }
 
 bool Grille::biais_inverseWin()
 {
-
+    //todo
 }
