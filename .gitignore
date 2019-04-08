@@ -11,3 +11,5 @@ CMakeLists.txt
 libs/
 # Fichiers inutile
 .DS_Store
+# Compilation
+obj/
