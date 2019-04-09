@@ -287,7 +287,16 @@ bool Grille::batonWin()
 
 bool Grille::l_normalWin()
 {
-    //todo
+    // (i, j), (i, j-1), (i+1, j), (i+2, j)
+    // (i, j), (i-1, j), (i, j-1), (i, j-2)
+    // (i, j), (i-1, j), (i-2, j), (i, j+1)
+    // (i, j), (i+1, j), (i, j+1), (i, j+2)
+
+    int offsets1 [] = {0, 0, 0, -1, 1, 0, 2, 0};
+    int offsets2 [] = {0, 0, -1, 0, 0, -1, 0, -2};
+    int offsets3 [] = {0, 0, -1, 0, -2, 0, 0, 1};
+    int offsets4 [] = {0, 0, 1, 0, 0, 1, 0, 2};
+    return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) || (this->winMotifTetris(offsets3)) || (this->winMotifTetris(offsets4)) );
 }
 
 bool Grille::l_inverseWin()
