@@ -293,9 +293,44 @@ bool Grille::l_inverseWin()
     //todo
 }
 
+bool Grille::testBloc(std::vector <std::pair<int, int>> coordinates)
+{
+    std::vector <Pion*> blockPions;
+    for(int i = 0; i < coordinates.size(); i++)
+    {
+        blockPions.push_back(this->getCase(coordinates.at(i).first, coordinates.at(i).second).getPion());
+    }
+    return this->haveOneCommonCharacteristic(blockPions);
+}
+
 bool Grille::blocWin()
 {
-    //todo
+    std::vector <std::pair<int, int>> block1;
+    block1.push_back(std::make_pair(0 ,0));
+    block1.push_back(std::make_pair(1 ,0));
+    block1.push_back(std::make_pair(0 ,1));
+    block1.push_back(std::make_pair(1 ,1));
+
+    std::vector <std::pair<int, int>> block2;
+    block2.push_back(std::make_pair(0 ,2));
+    block2.push_back(std::make_pair(1 ,2));
+    block2.push_back(std::make_pair(0 ,3));
+    block2.push_back(std::make_pair(1 ,3));
+
+    std::vector <std::pair<int, int>> block3;
+    block3.push_back(std::make_pair(2 ,0));
+    block3.push_back(std::make_pair(3 ,0));
+    block3.push_back(std::make_pair(2 ,1));
+    block3.push_back(std::make_pair(3 ,1));
+
+    std::vector <std::pair<int, int>> block4;
+    block4.push_back(std::make_pair(2 ,2));
+    block4.push_back(std::make_pair(3 ,2));
+    block4.push_back(std::make_pair(2 ,3));
+    block4.push_back(std::make_pair(3 ,3));
+
+    return(this->testBloc(block1) || this->testBloc(block2) || this->testBloc(block3) || this->testBloc(block4));
+
 }
 
 bool Grille::biais_normalWin()

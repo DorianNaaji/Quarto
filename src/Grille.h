@@ -35,6 +35,8 @@ private:
 
     bool diagonalOrReverseDiagonalWin();
 
+    bool testBloc(std::vector <std::pair<int, int>> coordinates);
+
 public:
 
     Grille();
