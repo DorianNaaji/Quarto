@@ -78,6 +78,10 @@ bool Grille::haveOneCommonCharacteristic(std::vector<Pion*> pions)
 }
 
 
+/**
+ * Checks if the player won horizontally
+ * @return true if won. False otherwise
+ */
 bool Grille::horizontalOrVerticalWin()
 {
     std::vector<Pion*> horizontalPions;
@@ -102,8 +106,8 @@ bool Grille::horizontalOrVerticalWin()
 
 
 /**
- *
- * @return bool : gagné (true) ou non (false) avec la diagonale ou diagonale inverse
+ * Checks if the player won with the diagonals.
+ * @return true if won. False otherwise
  */
 bool Grille::diagonalOrReverseDiagonalWin()
 {
@@ -136,6 +140,10 @@ bool Grille::win()
     return ( (this->horizontalOrVerticalWin()) || this->diagonalOrReverseDiagonalWin() );
 }
 
+/**
+ * Checks if the grid is full
+ * @return true if the gris is full. False otherwise
+ */
 bool Grille::full() {
     for (unsigned int i = 0; i < dimX; ++i) {
         for (unsigned int j = 0; j < dimY; ++j) {
@@ -249,7 +257,11 @@ int Grille::heuristicValue() {
     return bestValue;
 }
 
-
+/**
+ * Calls the appropriate win condition checking function according to a given pattern
+ * @param motif : the tetris pattern
+ * @return true if the pattern is made (win). False otherwise
+ */
 bool Grille::win(Motif motif)
 {
     switch(motif)
@@ -280,11 +292,20 @@ bool Grille::win(Motif motif)
     }
 }
 
+/**
+ * checks if the player made the stick tetris pattern
+ * @return true if won. False otherwise
+ */
 bool Grille::batonWin()
 {
     return this->horizontalOrVerticalWin();
 }
 
+/**
+ * Checks if the player made the "L" pattern
+ * @return true if the player won. False otherwise
+ * To checks if the game is won, we just check the cells around an (i,j) given cell to see if a L is made.
+ */
 bool Grille::l_normalWin()
 {
     // (i, j), (i, j-1), (i+1, j), (i+2, j)
@@ -299,24 +320,22 @@ bool Grille::l_normalWin()
     return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) || (this->winMotifTetris(offsets3)) || (this->winMotifTetris(offsets4)) );
 }
 
+/**
+ * Checks if the player made a reverse "L" pattern
+ * @return true if won. False otherwise
+ */
 bool Grille::l_inverseWin()
 {
-    //todo
-}
+    // (i, j), (i, j-1), (i-1, j), (i-2, j)
+    // (i, j), (i+1, j), (i+2, j), (i, j+1)
+    // (i, j), (i, j-2), (i, j-1), (i+1, j)
+    // (i, j), (i-1, j), (i, j+1), (i, j+2)
 
-/**
- * thanks to the params, returns true if 4 given pions (according to their coordinates) have a common characteristics. False otherwise
- * @param coordinates : a vector of pairs of ints.
- * @return
- */
-bool Grille::checkPionsWith4Coordinates(std::vector<std::pair<int, int>> coordinates)
-{
-    std::vector <Pion*> blockPions;
-    for(int i = 0; i < coordinates.size(); i++)
-    {
-        blockPions.push_back(this->getCase(coordinates.at(i).first, coordinates.at(i).second).getPion());
-    }
-    return this->haveOneCommonCharacteristic(blockPions);
+    int offsets1 [] = {0, 0, 0, -1, -1, 0, -2, 0};
+    int offsets2 [] = {0, 0, 1, 0, 2, 0, 0, 1};
+    int offsets3 [] = {0, 0, 0, -2, 0, -1, 1, 0};
+    int offsets4 [] = {0, 0, -1, 0, 0, 1, 0, 2};
+    return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) || (this->winMotifTetris(offsets3)) || (this->winMotifTetris(offsets4)) );
 }
 
 /**
@@ -332,11 +351,25 @@ bool Grille::blocWin()
     return this->winMotifTetris(offsets);
 }
 
+/**
+ * Checks if the "__--" pattern is made
+ * @return true if won. False otherwise
+ */
 bool Grille::biais_normalWin()
 {
-    //todo
+    //  (i,j), (i-1, j), (i, j-1), (i+1, j-1)
+    // or : (i, j), (i-1, j), (i-1, j-1), (i, j+1)
+
+    int offsets1 [] = {0, 0, -1, 0, 0, -1, 1, -1};
+    int offsets2 [] = {0, 0, -1, 0, -1, -1, 0, 1};
+
+    return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) );
 }
 
+/**
+ * Checks if the "T" pattern is made
+ * @return true if won. False otherwise
+ */
 bool Grille::tWin()
 {
     // T : (i,j), (i-1,j), (i+1,j), (i,j-1) _|_
@@ -349,6 +382,36 @@ bool Grille::tWin()
     int offsets3 [] = {0, 0, -1, 0, 1, 0, 0, 1};
     int offsets4 [] = {0, 0, -1, 0, 0, -1, 0, 1};
     return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) || (this->winMotifTetris(offsets3)) || (this->winMotifTetris(offsets4)) );
+}
+
+/**
+ * Checks if the "--__" pattern is made
+ * @return true if won. False otherwise
+ */
+bool Grille::biais_inverseWin()
+{
+    //  (i,j), (i, j-1), (i-1, j-1), (i+1, j)
+    // or : (i, j), (i-1, j), (i-1, j+1), (i, j-1)
+
+    int offsets1 [] = {0, 0, 0, -1, -1, -1, 1, 0};
+    int offsets2 [] = {0, 0, -1, 0, -1, 1, 0, -1};
+
+    return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) );
+}
+
+/**
+ * thanks to the params, returns true if 4 given pions (according to their coordinates) have a common characteristics. False otherwise
+ * @param coordinates : a vector of pairs of ints.
+ * @return
+ */
+bool Grille::checkPionsWith4Coordinates(std::vector<std::pair<int, int>> coordinates)
+{
+    std::vector <Pion*> blockPions;
+    for(int i = 0; i < coordinates.size(); i++)
+    {
+        blockPions.push_back(this->getCase(coordinates.at(i).first, coordinates.at(i).second).getPion());
+    }
+    return this->haveOneCommonCharacteristic(blockPions);
 }
 
 /**
@@ -400,9 +463,4 @@ bool Grille::winMotifTetris(int offsets[7])
         }
     }
     return false;
-}
-
-bool Grille::biais_inverseWin()
-{
-    //todo
 }
