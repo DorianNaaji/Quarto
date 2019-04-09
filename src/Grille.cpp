@@ -334,6 +334,7 @@ bool Grille::tWin()
     // or : (i,j), (i,j-1), (i+1,j), (i,j+1) |-
     // or : (i,j), (i-1,j), (i+1,j), (i,j+1)  T
     // or : (i,j), (i-1,j), (i, j-1), (i, j+1) -|
+
     int offsets1 [] = {0, 0, -1, 0, 1, 0, 0, -1};
     int offsets2 [] = {0, 0, 0, -1, 1, 0, 0, 1};
     int offsets3 [] = {0, 0, -1, 0, 1, 0, 0, 1};
