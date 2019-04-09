@@ -275,6 +275,8 @@ bool Grille::win(Motif motif)
         case BIAIS_INVERSE:
             return this->biais_inverseWin();
             break;
+        case NONE:
+            break;
     }
 }
 
@@ -303,34 +305,28 @@ bool Grille::testBloc(std::vector <std::pair<int, int>> coordinates)
     return this->haveOneCommonCharacteristic(blockPions);
 }
 
+/**
+ * Checks if the block tetris pattern is made in the grid
+ * @return
+ */
 bool Grille::blocWin()
 {
-    std::vector <std::pair<int, int>> block1;
-    block1.push_back(std::make_pair(0 ,0));
-    block1.push_back(std::make_pair(1 ,0));
-    block1.push_back(std::make_pair(0 ,1));
-    block1.push_back(std::make_pair(1 ,1));
-
-    std::vector <std::pair<int, int>> block2;
-    block2.push_back(std::make_pair(0 ,2));
-    block2.push_back(std::make_pair(1 ,2));
-    block2.push_back(std::make_pair(0 ,3));
-    block2.push_back(std::make_pair(1 ,3));
-
-    std::vector <std::pair<int, int>> block3;
-    block3.push_back(std::make_pair(2 ,0));
-    block3.push_back(std::make_pair(3 ,0));
-    block3.push_back(std::make_pair(2 ,1));
-    block3.push_back(std::make_pair(3 ,1));
-
-    std::vector <std::pair<int, int>> block4;
-    block4.push_back(std::make_pair(2 ,2));
-    block4.push_back(std::make_pair(3 ,2));
-    block4.push_back(std::make_pair(2 ,3));
-    block4.push_back(std::make_pair(3 ,3));
-
-    return(this->testBloc(block1) || this->testBloc(block2) || this->testBloc(block3) || this->testBloc(block4));
-
+    for(int i = 0; i < 3; i++)
+    {
+        for(int j = 0; j < 3; j++)
+        {
+            std::vector <std::pair<int, int>> block;
+            block.emplace_back(std::make_pair(i, j));
+            block.emplace_back(std::make_pair(i+1, j));
+            block.emplace_back(std::make_pair(i+1, j+1));
+            block.emplace_back(std::make_pair(i, j+1));
+            if(this->testBloc(block))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 bool Grille::biais_normalWin()
