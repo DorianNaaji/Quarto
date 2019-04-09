@@ -295,7 +295,12 @@ bool Grille::l_inverseWin()
     //todo
 }
 
-bool Grille::testBloc(std::vector <std::pair<int, int>> coordinates)
+/**
+ * thanks to the params, returns true if 4 given pions (according to their coordinates) have a common characteristics. False otherwise
+ * @param coordinates : a vector of pairs of ints.
+ * @return
+ */
+bool Grille::checkPionsWith4Coordinates(std::vector<std::pair<int, int>> coordinates)
 {
     std::vector <Pion*> blockPions;
     for(int i = 0; i < coordinates.size(); i++)
@@ -307,26 +312,15 @@ bool Grille::testBloc(std::vector <std::pair<int, int>> coordinates)
 
 /**
  * Checks if the block tetris pattern is made in the grid
- * @return
+ * @return true if so. False otherwise
+ * To perform a square pattern, the coordinates are : square : (i,j), (i+1,j), (i+1, j+1), (i, j+1)
+ * so the offsets are 0, 0, 1, 0, 1, 1, 0, 1
  */
 bool Grille::blocWin()
 {
-    for(int i = 0; i < 3; i++)
-    {
-        for(int j = 0; j < 3; j++)
-        {
-            std::vector <std::pair<int, int>> block;
-            block.emplace_back(std::make_pair(i, j));
-            block.emplace_back(std::make_pair(i+1, j));
-            block.emplace_back(std::make_pair(i+1, j+1));
-            block.emplace_back(std::make_pair(i, j+1));
-            if(this->testBloc(block))
-            {
-                return true;
-            }
-        }
-    }
-    return false;
+    // square : (i,j), (i+1,j), (i+1, j+1), (i, j+1)
+    int offsets [] = {0, 0, 1, 0, 1, 1, 0, 1};
+    return this->winMotifTetris(offsets);
 }
 
 bool Grille::biais_normalWin()
@@ -336,7 +330,66 @@ bool Grille::biais_normalWin()
 
 bool Grille::tWin()
 {
-    //todo
+    // T : (i,j), (i-1,j), (i+1,j), (i,j-1) _|_
+    // or : (i,j), (i,j-1), (i+1,j), (i,j+1) |-
+    // or : (i,j), (i-1,j), (i+1,j), (i,j+1)  T
+    // or : (i,j), (i-1,j), (i, j-1), (i, j+1) -|
+    int offsets1 [] = {0, 0, -1, 0, 1, 0, 0, -1};
+    int offsets2 [] = {0, 0, 0, -1, 1, 0, 0, 1};
+    int offsets3 [] = {0, 0, -1, 0, 1, 0, 0, 1};
+    int offsets4 [] = {0, 0, -1, 0, 0, -1, 0, 1};
+    return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) || (this->winMotifTetris(offsets3)) || (this->winMotifTetris(offsets4)) );
+}
+
+/**
+ * says if the coordinates are out of the grid or not
+ * @param coordinates
+ * @return true if some of the coordinates are out of the grid. false otherwise
+ */
+bool Grille::outOfGrid(std::vector<std::pair<int, int>> coordinates)
+{
+    for(int i = 0; i < coordinates.size(); i++)
+    {
+        if
+        (
+                (coordinates.at(i).first < 0)
+            ||  (coordinates.at(i).first > 3)
+            ||  (coordinates.at(i).second < 0)
+            ||  (coordinates.at(i).second > 3)
+        )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ *
+ * @param offsets array of 8 offsets applicated to 8 coordinates
+ * @return true if the pattern is made. False otherwise
+ */
+bool Grille::winMotifTetris(int offsets[7])
+{
+    for(int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            std::vector <std::pair<int, int>> block;
+            block.emplace_back(std::make_pair(i+offsets[0], j+offsets[1]));
+            block.emplace_back(std::make_pair(i+offsets[2], j+offsets[3]));
+            block.emplace_back(std::make_pair(i+offsets[4], j+offsets[5]));
+            block.emplace_back(std::make_pair(i+offsets[6], j+offsets[7]));
+            if(!this->outOfGrid(block))
+            {
+                if(this->checkPionsWith4Coordinates(block))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 bool Grille::biais_inverseWin()

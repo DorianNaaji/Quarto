@@ -35,7 +35,11 @@ private:
 
     bool diagonalOrReverseDiagonalWin();
 
-    bool testBloc(std::vector <std::pair<int, int>> coordinates);
+    bool checkPionsWith4Coordinates(std::vector<std::pair<int, int>> coordinates);
+
+    bool winMotifTetris(int offsets[8]);
+
+    bool outOfGrid(std::vector<std::pair<int, int>> coordinates);
 
 public:
 

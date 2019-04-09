@@ -13,7 +13,7 @@ enum Motif
     L_INVERSE = 2, // ___|
     BLOC = 3, // []
     BIAIS_NORMAL = 4, // __--
-    T = 5, // --|--
+    T = 5, // -|-
     BIAIS_INVERSE = 6 // --__
 };
 
