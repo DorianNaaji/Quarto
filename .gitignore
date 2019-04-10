@@ -12,4 +12,4 @@ libs/
 # Fichiers inutile
 .DS_Store
 # Compilation
-obj/
+obj/*.o
