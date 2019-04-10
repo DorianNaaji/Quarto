@@ -41,6 +41,22 @@ bool Pion::equals(Pion * pion)
     return false;
 }
 
+bool Pion::operator==(Pion *pion) {
+    if(this != nullptr && pion != nullptr)
+    {
+        // bool a = this->couleur == pion->couleur;
+        // bool b = this->forme == pion->forme;
+        // bool c = this->taille == pion->taille;
+        // bool d = this->trou == pion->trou;
+
+        return( (this->couleur == pion->couleur)
+                && (this->forme == pion->forme)
+                && (this->taille == pion->taille)
+                && (this->trou == pion->trou) );
+    }
+    return false;
+}
+
 void Pion::read() {
     std::cout<<couleur<<" | "<<forme<<" | "<<taille<<" | "<<trou<<std::endl;
     std::cout<<lien_image<<std::endl;

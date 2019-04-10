@@ -48,28 +48,29 @@ bool Grille::haveOneCommonCharacteristic(std::vector<Pion*> pions)
     }
     if(canCheck)
     {
-        if
-        (
-            // les pions ont tous un trou
-            ((pions.at(0)->getTrou()) && (pions.at(1)->getTrou()) && (pions.at(2)->getTrou()) && (pions.at(3)->getTrou()))
-            // les pions n'ont pas de trou
-            ||  (!(pions.at(0)->getTrou()) && !(pions.at(1)->getTrou()) && !(pions.at(2)->getTrou()) && !(pions.at(3)->getTrou()))
-            // les pions sont bleu
-            ||  ((pions.at(0)->getCouleur()) && (pions.at(1)->getCouleur()) && (pions.at(2)->getCouleur()) && (pions.at(3)->getCouleur()))
-            // les pions sont rouges
-            ||  (!(pions.at(0)->getCouleur()) && !(pions.at(1)->getCouleur()) && !(pions.at(2)->getCouleur()) && !(pions.at(3)->getCouleur()))
-            // les pions sont rectangulaires
-            ||  ((pions.at(0)->getForme()) && (pions.at(1)->getForme()) && (pions.at(2)->getForme()) && (pions.at(3)->getForme()))
-            // les pions sont ronds
-            ||  (!(pions.at(0)->getForme()) && !(pions.at(1)->getForme()) && !(pions.at(2)->getForme()) && !(pions.at(3)->getForme()))
-            // les pions sont grands
-            ||  ((pions.at(0)->getTaille()) && (pions.at(1)->getTaille()) && (pions.at(2)->getTaille()) && (pions.at(3)->getTaille()))
-            // les pions sont petits
-            ||  (!(pions.at(0)->getTaille()) && !(pions.at(1)->getTaille()) && !(pions.at(2)->getTaille()) && !(pions.at(3)->getTaille()))
-        )
-        {
-            return true;
-        }
+        return ((pions.at(0)->getTrou()) && (pions.at(1)->getTrou()) && (pions.at(2)->getTrou()) &&
+                (pions.at(3)->getTrou()))
+               // les pions n'ont pas de trou
+               || (!(pions.at(0)->getTrou()) && !(pions.at(1)->getTrou()) && !(pions.at(2)->getTrou()) &&
+                   !(pions.at(3)->getTrou()))
+               // les pions sont bleu
+               || ((pions.at(0)->getCouleur()) && (pions.at(1)->getCouleur()) && (pions.at(2)->getCouleur()) &&
+                   (pions.at(3)->getCouleur()))
+               // les pions sont rouges
+               || (!(pions.at(0)->getCouleur()) && !(pions.at(1)->getCouleur()) && !(pions.at(2)->getCouleur()) &&
+                   !(pions.at(3)->getCouleur()))
+               // les pions sont rectangulaires
+               || ((pions.at(0)->getForme()) && (pions.at(1)->getForme()) && (pions.at(2)->getForme()) &&
+                   (pions.at(3)->getForme()))
+               // les pions sont ronds
+               || (!(pions.at(0)->getForme()) && !(pions.at(1)->getForme()) && !(pions.at(2)->getForme()) &&
+                   !(pions.at(3)->getForme()))
+               // les pions sont grands
+               || ((pions.at(0)->getTaille()) && (pions.at(1)->getTaille()) && (pions.at(2)->getTaille()) &&
+                   (pions.at(3)->getTaille()))
+               // les pions sont petits
+               || (!(pions.at(0)->getTaille()) && !(pions.at(1)->getTaille()) && !(pions.at(2)->getTaille()) &&
+                   !(pions.at(3)->getTaille()));
     }
     else
     {
@@ -116,14 +117,7 @@ bool Grille::diagonalOrReverseDiagonalWin()
         diagonalPions.push_back(this->getCase(i, j).getPion());
         reverseDiagonalPions.push_back(this->getCase(i, i).getPion());
     }
-    if(this->haveOneCommonCharacteristic(diagonalPions) || this->haveOneCommonCharacteristic(reverseDiagonalPions))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return this->haveOneCommonCharacteristic(diagonalPions) || this->haveOneCommonCharacteristic(reverseDiagonalPions);
 }
 
 /**
@@ -147,17 +141,18 @@ bool Grille::full() {
 
 int Grille::heuristicValueHorizontal(unsigned int indice) {
     int value, bestValue = 0;
-    std::vector<Pion> tab;
+    std::vector<Pion *> tab;
     bool equals;
     for (unsigned int j1 = 0; j1 < dimY; ++j1) {
         tab.clear();
-        tab.push_back(*(this->getCase(indice, j1).getPion()));
+        tab.push_back(this->getCase(indice, j1).getPion());
 
         for (unsigned int j2 = j1; j2 < dimY; ++j2) {
+            equals = true;
             for (auto &k : tab) {
-                equals = k.equals(this->getCase(indice, j2).getPion());
+                equals = k->equals(this->getCase(indice, j2).getPion());
             }
-            tab.push_back(*(this->getCase(indice, j2).getPion()));
+            if (equals) tab.push_back(this->getCase(indice, j2).getPion());
         }
         value = (int)tab.size();
         if (value > bestValue) bestValue = value;
@@ -168,17 +163,18 @@ int Grille::heuristicValueHorizontal(unsigned int indice) {
 
 int Grille::heuristicValueVertical(unsigned int indice) {
     int value, bestValue = 0;
-    std::vector<Pion> tab;
+    std::vector<Pion *> tab;
     bool equals;
     for (unsigned int i1 = 0; i1 < dimY; ++i1) {
         tab.clear();
-        tab.push_back(*(this->getCase(i1, indice).getPion()));
+        tab.push_back(this->getCase(i1, indice).getPion());
 
         for (unsigned int i2 = i1; i2 < dimY; ++i2) {
+            equals = true;
             for (auto &k : tab) {
-                equals = k.equals(this->getCase(i2, indice).getPion());
+                equals = k->equals(this->getCase(i2, indice).getPion());
             }
-            tab.push_back(*(this->getCase(i2, indice).getPion()));
+            if (equals) tab.push_back(this->getCase(i2, indice).getPion());
         }
         value = (int)tab.size();
         if (value > bestValue) bestValue = value;
@@ -189,17 +185,18 @@ int Grille::heuristicValueVertical(unsigned int indice) {
 
 int Grille::heuristicValueDiagonal() {
     int value, bestValue = 0;
-    std::vector<Pion> tab;
+    std::vector<Pion *> tab;
     bool equals;
     for (unsigned int ind1 = 0; ind1 < dimX; ++ind1) {
         tab.clear();
-        tab.push_back(*(this->getCase(ind1, ind1).getPion()));
+        tab.push_back(this->getCase(ind1, ind1).getPion());
 
         for (unsigned int ind2 = ind1; ind2 < dimY; ++ind2) {
+            equals = true;
             for (auto &k : tab) {
-                equals = k.equals(this->getCase(ind2, ind2).getPion());
+                equals = k->equals(this->getCase(ind2, ind2).getPion());
             }
-            tab.push_back(*(this->getCase(ind2, ind2).getPion()));
+            if (equals) tab.push_back(this->getCase(ind2, ind2).getPion());
         }
         value = (int)tab.size();
         if (value > bestValue) bestValue = value;
@@ -210,17 +207,18 @@ int Grille::heuristicValueDiagonal() {
 
 int Grille::heuristicValueAntiDiagonal() {
     int value, bestValue = 0;
-    std::vector<Pion> tab;
+    std::vector<Pion *> tab;
     bool equals;
     for (unsigned int ind1 = 0; ind1 < dimX; ++ind1) {
         tab.clear();
-        tab.push_back(*(this->getCase(ind1, 3-ind1).getPion()));
+        tab.push_back(this->getCase(ind1, 3-ind1).getPion());
 
         for (unsigned int ind2 = ind1; ind2 < dimY; ++ind2) {
+            equals = true;
             for (auto &k : tab) {
-                equals = k.equals(this->getCase(ind2, 3-ind2).getPion());
+                equals = k->equals(this->getCase(ind2, 3-ind2).getPion());
             }
-            tab.push_back(*(this->getCase(ind2, 3-ind2).getPion()));
+            if (equals) tab.push_back(this->getCase(ind2, 3-ind2).getPion());
         }
         value = (int)tab.size();
         if (value > bestValue) bestValue = value;
@@ -254,27 +252,14 @@ bool Grille::win(Motif motif)
 {
     switch(motif)
     {
-        case BATON:
-            return this->batonWin();
-            break;
-        case L_NORMAL:
-            return this->l_normalWin();
-            break;
-        case L_INVERSE:
-            return this->l_inverseWin();
-            break;
-        case BLOC:
-            return this->blocWin();
-            break;
-        case BIAIS_NORMAL:
-            return this->biais_normalWin();
-            break;
-        case T:
-            return this->tWin();
-            break;
-        case BIAIS_INVERSE:
-            return this->biais_inverseWin();
-            break;
+        case BATON : return this->batonWin();
+        case L_NORMAL : return this->l_normalWin();
+        case L_INVERSE : return this->l_inverseWin();
+        case BLOC : return this->blocWin();
+        case BIAIS_NORMAL : return this->biais_normalWin();
+        case T : return this->tWin();
+        case BIAIS_INVERSE : return this->biais_inverseWin();
+        default : return false;
     }
 }
 

@@ -6,7 +6,7 @@
 #include "IA.h"
 #include <limits>
 
-void IA::remplirArbre(Grille g, int dept, int deptFin, std::vector<Pion> &tabPion, Pion * pionDepart = nullptr) {
+void IA::remplirArbre(Grille g, int dept, int deptFin, Pion ** tabPion, Pion * pionDepart = nullptr) {
     this->grid = g;
     this->children.clear();
 
@@ -22,26 +22,28 @@ void IA::remplirArbre(Grille g, int dept, int deptFin, std::vector<Pion> &tabPio
                         child = new IA();
                         child->ind_x = i;
                         child->ind_y = j;
-                        for (unsigned int k = 0; k < tabPion.size(); ++k) {
-                            if (tabPion[k].equals(pionDepart)) {
+                        for (unsigned int k = 0; k < 16; ++k) {
+                            if (tabPion[k]->equals(pionDepart)) {
                                 child->ind_Pion = k;
-                                tabPion.erase(tabPion.begin()+k);
+                                tabPion[k] = nullptr;
                                 child->remplirArbre(tmp, dept+1, deptFin, tabPion);
-                                tabPion.insert(tabPion.begin()+k,*tmp.getCase(i, j).getPion());
+                                tabPion[k] = tmp.getCase(i, j).getPion();
                                 children.push_back(*child);
                             }
                         }
                     } else {
-                        for (unsigned int k = 0; k < tabPion.size(); ++k) {
-                            tmp.getCase(i, j).setPion(&tabPion[k]);
-                            child = new IA();
-                            child->ind_x = i;
-                            child->ind_y = j;
-                            child->ind_Pion = k;
-                            tabPion.erase(tabPion.begin()+k);
-                            child->remplirArbre(tmp, dept+1, deptFin, tabPion);
-                            tabPion.insert(tabPion.begin()+k,*tmp.getCase(i, j).getPion());
-                            children.push_back(*child);
+                        for (unsigned int k = 0; k < 16; ++k) {
+                            if (tabPion[k] != nullptr) {
+                                tmp.getCase(i, j).setPion(tabPion[k]);
+                                child = new IA();
+                                child->ind_x = i;
+                                child->ind_y = j;
+                                child->ind_Pion = k;
+                                tabPion[k] = nullptr;
+                                child->remplirArbre(tmp, dept+1, deptFin, tabPion);
+                                tabPion[k] = tmp.getCase(i, j).getPion();
+                                children.push_back(*child);
+                            }
                         }
                     }
                     tmp.getCase(i, j).setPion(nullptr);
@@ -82,22 +84,33 @@ int IA::alphaBeta(int & x, int & y, int alpha, int beta, unsigned int tour,
 
         bestValue = this->grid.heuristicValue();
 
-    } else if (maximizingPlayer) {
-        bestValue = std::numeric_limits<int>::min();
-        for(auto child : children) {
-            tmp_value = child.alphaBeta(x, y, alpha, beta, tour+1, !maximizingPlayer);
-            bestValue = std::max(bestValue, tmp_value);
-            alpha = std::max(alpha, bestValue);
-            if (alpha >= beta) break;
+    } else {
+        int tmp_x, tmp_y;
+        if (maximizingPlayer) {
+            bestValue = std::numeric_limits<int>::min();
+            for(auto child : children) {
+                tmp_value = child.alphaBeta(x, y, alpha, beta, tour+1, !maximizingPlayer);
+                if (tmp_value > bestValue) {
+                    tmp_x = x;
+                    tmp_y = y;
+                }
+                alpha = std::max(alpha, bestValue);
+                if (alpha >= beta) break;
+            }
+        } else {
+            bestValue = std::numeric_limits<int>::max();
+            for(auto child : children) {
+                tmp_value = child.alphaBeta(x, y, alpha, beta, tour+1, !maximizingPlayer);
+                if (tmp_value < bestValue) {
+                    tmp_x = x;
+                    tmp_y = y;
+                }
+                beta = std::min(beta, bestValue);
+                if (alpha >= beta) break;
+            }
         }
-    }else {
-        bestValue = std::numeric_limits<int>::max();
-        for(auto child : children) {
-            tmp_value = child.alphaBeta(x, y, alpha, beta, tour+1, !maximizingPlayer);
-            bestValue = std::min(bestValue, tmp_value);
-            beta = std::min(beta, bestValue);
-            if (alpha >= beta) break;
-        }
+        x = tmp_x;
+        y = tmp_y;
     }
 
     this->value = bestValue;

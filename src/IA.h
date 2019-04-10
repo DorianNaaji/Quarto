@@ -21,7 +21,7 @@ private:
 
 public:
 
-    void remplirArbre(Grille g, int deptDepart, int deptFin, std::vector<Pion> & tabPion, Pion * pionDeart);
+    void remplirArbre(Grille g, int deptDepart, int deptFin, Pion * * tabPion, Pion * pionDeart);
 
     int alphaBeta(int & x, int & y, int alpha, int beta, unsigned int tour, bool maximizingPlayer);
 

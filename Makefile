@@ -14,7 +14,7 @@ HEADER= src/Pion.h src/Case.h src/Grille.h src/IA.h
 all: $(EXEC)
 
 bin/quarto: main.cpp $(OBJ)
-	g++ $(GGBD) main.cpp $(OBJ) -o bin/quarto $(libFlags)
+	g++ -std=c++11 $(GGBD) main.cpp $(OBJ) -o bin/quarto $(libFlags)
 
 obj/%.o: src/%.cpp $(HEADER)
 	g++ $(paramC) $< -o $@

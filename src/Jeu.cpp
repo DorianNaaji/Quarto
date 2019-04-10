@@ -23,6 +23,8 @@ void Jeu::init() {
     this->J1 = "J1";
     this->J2 = "J2";
 
+    this->tabPion = new Pion* [16];
+
     Pion * p;
     bool tab[4];
     int k;
@@ -42,7 +44,7 @@ void Jeu::init() {
         }
         link += ".png";
         p = new Pion(tab[3], tab[2], tab[1], tab[0], link);
-        this->tabPion.push_back(*p);
+        this->tabPion[i] = p;
     }
 }
 
@@ -79,7 +81,6 @@ void Jeu::selectCaseGrille(int mousseX, int mousseY, int & x, int & y) {
         }
     }
 }
-
 
 /**
  * Affichage la fenêtre de choix des pièces / des règles
@@ -246,6 +247,10 @@ void Jeu::choixPieces(bool pvp)
                                     case 6:
                                         this->_motif = BIAIS_INVERSE;
                                         break;
+
+                                    default:
+                                        this->_motif = BATON;
+                                        break;
                                 }
                                 //std::cout << this->_motif << std::endl;
                                 if(pvp)
@@ -285,7 +290,6 @@ void Jeu::choixPieces(bool pvp)
 
 void Jeu::menu() {
     this->_motif = NONE;
-    bool pvpActivated = false;
     unsigned int largeur = 1350, hauteur = 800;
     // création de la fenêtre
     sf::RenderWindow window(sf::VideoMode(largeur, hauteur), "Mode de Jeu | Quarto", sf::Style::Titlebar | sf::Style::Close);
@@ -364,8 +368,7 @@ void Jeu::menu() {
                              * Cas ou on choisit le mode 2 joueurs
                              */
                             window.close();
-                            pvpActivated = true;
-                            this->choixPieces(pvpActivated);
+                            this->choixPieces(true);
                         }else if (sf::Mouse::getPosition(window).x >= ((largeur-ia1.getLocalBounds().width)/2)
                                   && sf::Mouse::getPosition(window).x <= ((largeur+ia1.getLocalBounds().width)/2)
                                   && sf::Mouse::getPosition(window).y >= ia1.getPosition().y
@@ -377,6 +380,7 @@ void Jeu::menu() {
 
                             //this->choixPieces(pvpActivated); //(if IA is made for tetris patterns)
                             this->init();
+                            this->_motif = BATON;
                             this->IA_alpha_beta();
 
                         }else if (sf::Mouse::getPosition(window).x >= ((largeur-quit.getLocalBounds().width)/2)
@@ -504,7 +508,6 @@ void Jeu::resultat(const std::string & message) {
     }
 }
 
-
 void Jeu::pvp() {
     std::string infoTourJ1, infoTourJ2, joueur;
 
@@ -556,8 +559,8 @@ void Jeu::pvp() {
         rect.setOutlineThickness(5.f);
         rect.setOutlineColor(sf::Color::Transparent);
 
-        if (!texture->loadFromFile("../images/"+this->tabPion[i].getLien_image(), sf::IntRect(0, 0, 400, 400)))
-            texture->loadFromFile("./images/"+this->tabPion[i].getLien_image(), sf::IntRect(0, 0, 400, 400));
+        if (!texture->loadFromFile("../images/"+this->tabPion[i]->getLien_image(), sf::IntRect(0, 0, 400, 400)))
+            texture->loadFromFile("./images/"+this->tabPion[i]->getLien_image(), sf::IntRect(0, 0, 400, 400));
 
         texture->setSmooth(true);
 
@@ -569,7 +572,7 @@ void Jeu::pvp() {
     sf::RectangleShape chosenPattern;
     if(this->_motif != -1)
     {
-        sf::Texture* tetrisTexture = new sf::Texture;
+        auto * tetrisTexture = new sf::Texture;
         sf::RectangleShape rect(sf::Vector2f(200.f, 150.f));
 
         rect.setPosition(1000, 135);
@@ -616,7 +619,7 @@ void Jeu::pvp() {
                         this->selectCaseGrille(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, ind_x, ind_y);
 
                         if (ind_pion != -1 && ind_y != -1) {
-                            this->g->setCase(static_cast<unsigned int>(ind_x), static_cast<unsigned int>(ind_y), & this->tabPion[ind_pion]);
+                            this->g->setCase(static_cast<unsigned int>(ind_x), static_cast<unsigned int>(ind_y), & *this->tabPion[ind_pion]);
                             grille[ind_y*4+ind_x].setTexture(openGrille[ind_pion].getTexture());
                             openGrille[ind_pion].setTexture(nullptr);
                             openGrille[ind_pion].setOutlineColor(sf::Color::Transparent);
@@ -690,7 +693,7 @@ void Jeu::pvp() {
 
 void Jeu::IA_alpha_beta() {
     std::string infoTourJ1, infoTourIA, joueur;
-
+    Pion tmp_pion;
     int ind_pion = -1, ind_x = -1, ind_y = -1;
 
     infoTourJ1 = "L'IA choisit le pion et\n"+J1+" le place.";
@@ -703,7 +706,8 @@ void Jeu::IA_alpha_beta() {
     // création texte explicatif
     sf::Text text;
     sf::Font font;
-    font.loadFromFile("../fonts/Ubuntu-Regular.ttf");
+    if (!font.loadFromFile("../fonts/Ubuntu-Regular.ttf"))
+        font.loadFromFile("./fonts/Ubuntu-Regular.ttf");
     text.setFont(font);
     text.setFillColor(sf::Color::Black);
     text.setCharacterSize(50);
@@ -732,8 +736,8 @@ void Jeu::IA_alpha_beta() {
         rect.setOutlineThickness(5.f);
         rect.setOutlineColor(sf::Color::Transparent);
 
-        if (!texture->loadFromFile("../images/"+this->tabPion[i].getLien_image(), sf::IntRect(0, 0, 400, 400)))
-            texture->loadFromFile("./images/"+this->tabPion[i].getLien_image(), sf::IntRect(0, 0, 400, 400));
+        if (!texture->loadFromFile("../images/"+this->tabPion[i]->getLien_image(), sf::IntRect(0, 0, 400, 400)))
+            texture->loadFromFile("./images/"+this->tabPion[i]->getLien_image(), sf::IntRect(0, 0, 400, 400));
 
         texture->setSmooth(true);
 
@@ -769,7 +773,7 @@ void Jeu::IA_alpha_beta() {
 
                         if (tour%2 == 1) {
                             std::cout<<"Creation arbre..."<<std::endl;
-                            ia->remplirArbre(*g, 0, 2, tabPion, &tabPion[ind_pion]);
+                            ia->remplirArbre(*g, 0, 2, tabPion, tabPion[ind_pion]);
                             std::cout<<"Creation arbre... ok!"<<std::endl;
                             std::cout<<"Selection case..."<<std::endl;
                             ia->alphaBeta(ind_x, ind_y, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour, true);
@@ -777,8 +781,11 @@ void Jeu::IA_alpha_beta() {
                             std::cout<<ind_x<<" | "<<ind_y<<std::endl;
 
                             std::cout<<"Placement Pion..."<<std::endl;
+                            this->g->setCase(static_cast<unsigned int>(ind_x), static_cast<unsigned int>(ind_y),
+                                             & *this->tabPion[ind_pion]);
                             grille[ind_y*4+ind_x].setTexture(openGrille[ind_pion].getTexture());
                             std::cout<<"Placement Texture... ok!"<<std::endl;
+                            this->tabPion[ind_pion] = nullptr;
                             openGrille[ind_pion].setTexture(nullptr);
                             std::cout<<"Suppresion Texture... ok!"<<std::endl;
                             openGrille[ind_pion].setOutlineColor(sf::Color::Transparent);
@@ -791,6 +798,10 @@ void Jeu::IA_alpha_beta() {
 
                             ia->selectPion(ind_pion, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour, false);
 
+                            while (openGrille[ind_pion].getTexture() == nullptr && ind_pion < 16) {
+                                ind_pion++;
+                            }
+
                             openGrille[ind_pion].setOutlineColor(sf::Color::Red);
 
                             ind_x = -1;
@@ -798,9 +809,9 @@ void Jeu::IA_alpha_beta() {
                             tour++;
 
                             //gestion des conditions de victoire
-                            if(this->g->win()) {
-                                //window.close();
-                                //this->resultat(joueur);
+                            if(this->g->win(this->_motif)) {
+                                window.close();
+                                this->resultat(joueur);
                             } else if (this->g->full()) {
                                 window.close();
                                 this->resultat("match nul");
@@ -812,9 +823,10 @@ void Jeu::IA_alpha_beta() {
 
                         if (ind_pion != -1 && ind_x != -1 && ind_y != -1) {
                             this->g->setCase(static_cast<unsigned int>(ind_x), static_cast<unsigned int>(ind_y),
-                                    & this->tabPion[ind_pion]);
+                                    & *this->tabPion[ind_pion]);
 
                             grille[ind_y*4+ind_x].setTexture(openGrille[ind_pion].getTexture());
+                            this->tabPion[ind_pion] = nullptr;
                             openGrille[ind_pion].setTexture(nullptr);
                             openGrille[ind_pion].setOutlineColor(sf::Color::Transparent);
 
@@ -826,10 +838,9 @@ void Jeu::IA_alpha_beta() {
 
 
                         //gestion des conditions de victoire
-                        bool win = this->g->win();
-                        if(win) {
-                            //window.close();
-                            //this->resultat(joueur);
+                        if(this->g->win(this->_motif)) {
+                            window.close();
+                            this->resultat(joueur);
                         } else if (this->g->full()) {
                             window.close();
                             this->resultat("match nul");

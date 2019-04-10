@@ -14,11 +14,11 @@
 class Jeu {
 private:
 
-    Grille * g;
-    unsigned int tour;
+    Grille * g{};
+    unsigned int tour{};
     std::string J1, J2;
-    std::vector<Pion> tabPion;
-    IA * ia;
+    Pion * * tabPion{};
+    IA * ia{};
     void choixPieces(bool pvp);
     Motif _motif = NONE;
 
