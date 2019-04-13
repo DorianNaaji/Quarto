@@ -19,9 +19,39 @@ Pion::Pion(bool taille, bool forme, bool couleur, bool trou, std::string str) {
     this->lien_image = std::move(str);
 }
 
+bool Pion::getForme() const
+{
+    assert(this);
+    return this->forme;
+}
+
+bool Pion::getTaille() const
+{
+    assert(this);
+    return this->taille;
+}
+
+bool Pion::getCouleur() const
+{
+    assert(this);
+    return this->couleur;
+}
+
+bool Pion::getTrou() const
+{
+    assert(this);
+    return this->trou;
+}
+
+const std::string &Pion::getLien_image() const {
+    assert(this);
+    return lien_image;
+}
+
 bool Pion::equals(Pion * pion)
 {
-    if(this != nullptr && pion != nullptr)
+    assert(this);
+    if(pion != nullptr)
     {
         // bool a = this->couleur == pion->couleur;
         // bool b = this->forme == pion->forme;
@@ -37,7 +67,8 @@ bool Pion::equals(Pion * pion)
 }
 
 bool Pion::operator==(Pion *pion) {
-    if(this != nullptr && pion != nullptr)
+    assert(this);
+    if(pion != nullptr)
     {
         // bool a = this->couleur == pion->couleur;
         // bool b = this->forme == pion->forme;
@@ -50,10 +81,6 @@ bool Pion::operator==(Pion *pion) {
                 && (this->trou == pion->trou) );
     }
     return false;
-}
-
-const std::string &Pion::getLien_image() const {
-    return lien_image;
 }
 
 std::string Pion::toString()
@@ -96,36 +123,3 @@ std::string Pion::toString()
    }
    return res;
 }
-
-bool Pion::getForme() const
-{
-    if(this != nullptr)
-    {
-        return this->forme;
-    }
-}
-
-bool Pion::getTaille() const
-{
-    if(this != nullptr)
-    {
-        return this->taille;
-    }
-}
-
-bool Pion::getCouleur() const
-{
-    if(this != nullptr)
-    {
-        return this->couleur;
-    }
-}
-
-bool Pion::getTrou() const
-{
-    if(this != nullptr)
-    {
-        return this->trou;
-    }
-}
-

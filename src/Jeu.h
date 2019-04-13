@@ -40,7 +40,7 @@ private:
     /**
      * @brief instance de l'IA
      */
-    IA * ia;
+    IA * ia{};
 
     /**
      * @brief Motif de victoire
