@@ -19,11 +19,6 @@ Pion::Pion(bool taille, bool forme, bool couleur, bool trou, std::string str) {
     this->lien_image = std::move(str);
 }
 
-/**
- *
- * @param pion Prend en paramètre un pion
- * @return vrai si le pion courant (this) est égal au pion comapré (en paramètre)
- */
 bool Pion::equals(Pion * pion)
 {
     if(this != nullptr && pion != nullptr)
@@ -55,11 +50,6 @@ bool Pion::operator==(Pion *pion) {
                 && (this->trou == pion->trou) );
     }
     return false;
-}
-
-void Pion::read() {
-    std::cout<<couleur<<" | "<<forme<<" | "<<taille<<" | "<<trou<<std::endl;
-    std::cout<<lien_image<<std::endl;
 }
 
 const std::string &Pion::getLien_image() const {

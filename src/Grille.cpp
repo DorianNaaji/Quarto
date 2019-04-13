@@ -29,11 +29,6 @@ void Grille::setCase(unsigned int x, unsigned int y, Pion * p) {
     if (x < dimX && y < dimY) grid[y*dimX+x].setPion(p);
 }
 
-/**
- *
- * @param pions A 4-sized vector containing pions
- * @return true if the "pions" have one common characteristic. False otherwise
- */
 bool Grille::haveOneCommonCharacteristic(std::vector<Pion*> pions)
 {
     bool canCheck = true;
@@ -78,11 +73,6 @@ bool Grille::haveOneCommonCharacteristic(std::vector<Pion*> pions)
     }
 }
 
-
-/**
- * Checks if the player won horizontally
- * @return true if won. False otherwise
- */
 bool Grille::horizontalOrVerticalWin()
 {
     std::vector<Pion*> horizontalPions;
@@ -104,12 +94,6 @@ bool Grille::horizontalOrVerticalWin()
     return false;
 }
 
-
-
-/**
- * Checks if the player won with the diagonals.
- * @return true if won. False otherwise
- */
 bool Grille::diagonalOrReverseDiagonalWin()
 {
     unsigned int i;
@@ -124,20 +108,11 @@ bool Grille::diagonalOrReverseDiagonalWin()
     return this->haveOneCommonCharacteristic(diagonalPions) || this->haveOneCommonCharacteristic(reverseDiagonalPions);
 }
 
-/**
- *
- * @param joueur le joueur sur lequel on souhaite faire la vérification de victoire
- * @return bool : gagné (true) ou non (false)
- */
 bool Grille::win()
 {
     return ( (this->horizontalOrVerticalWin()) || this->diagonalOrReverseDiagonalWin() );
 }
 
-/**
- * Checks if the grid is full
- * @return true if the gris is full. False otherwise
- */
 bool Grille::full() {
     for (unsigned int i = 0; i < dimX; ++i) {
         for (unsigned int j = 0; j < dimY; ++j) {
@@ -255,11 +230,6 @@ int Grille::heuristicValue() {
     return bestValue;
 }
 
-/**
- * Calls the appropriate win condition checking function according to a given pattern
- * @param motif : the tetris pattern
- * @return true if the pattern is made (win). False otherwise
- */
 bool Grille::win(Motif motif)
 {
     switch(motif)
@@ -276,20 +246,11 @@ bool Grille::win(Motif motif)
     }
 }
 
-/**
- * checks if the player made the stick tetris pattern
- * @return true if won. False otherwise
- */
 bool Grille::batonWin()
 {
     return this->horizontalOrVerticalWin();
 }
 
-/**
- * Checks if the player made the "L" pattern
- * @return true if the player won. False otherwise
- * To checks if the game is won, we just check the cells around an (i,j) given cell to see if a L is made.
- */
 bool Grille::l_normalWin()
 {
     // (i, j), (i, j-1), (i+1, j), (i+2, j)
@@ -304,10 +265,6 @@ bool Grille::l_normalWin()
     return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) || (this->winMotifTetris(offsets3)) || (this->winMotifTetris(offsets4)) );
 }
 
-/**
- * Checks if the player made a reverse "L" pattern
- * @return true if won. False otherwise
- */
 bool Grille::l_inverseWin()
 {
     // (i, j), (i, j-1), (i-1, j), (i-2, j)
@@ -322,12 +279,6 @@ bool Grille::l_inverseWin()
     return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) || (this->winMotifTetris(offsets3)) || (this->winMotifTetris(offsets4)) );
 }
 
-/**
- * Checks if the block tetris pattern is made in the grid
- * @return true if so. False otherwise
- * To perform a square pattern, the coordinates are : square : (i,j), (i+1,j), (i+1, j+1), (i, j+1)
- * so the offsets are 0, 0, 1, 0, 1, 1, 0, 1
- */
 bool Grille::blocWin()
 {
     // square : (i,j), (i+1,j), (i+1, j+1), (i, j+1)
@@ -335,10 +286,6 @@ bool Grille::blocWin()
     return this->winMotifTetris(offsets);
 }
 
-/**
- * Checks if the "__--" pattern is made
- * @return true if won. False otherwise
- */
 bool Grille::biais_normalWin()
 {
     //  (i,j), (i-1, j), (i, j-1), (i+1, j-1)
@@ -350,10 +297,6 @@ bool Grille::biais_normalWin()
     return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) );
 }
 
-/**
- * Checks if the "T" pattern is made
- * @return true if won. False otherwise
- */
 bool Grille::tWin()
 {
     // T : (i,j), (i-1,j), (i+1,j), (i,j-1) _|_
@@ -368,10 +311,6 @@ bool Grille::tWin()
     return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) || (this->winMotifTetris(offsets3)) || (this->winMotifTetris(offsets4)) );
 }
 
-/**
- * Checks if the "--__" pattern is made
- * @return true if won. False otherwise
- */
 bool Grille::biais_inverseWin()
 {
     //  (i,j), (i, j-1), (i-1, j-1), (i+1, j)
@@ -383,11 +322,6 @@ bool Grille::biais_inverseWin()
     return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) );
 }
 
-/**
- * thanks to the params, returns true if 4 given pions (according to their coordinates) have a common characteristics. False otherwise
- * @param coordinates : a vector of pairs of ints.
- * @return
- */
 bool Grille::checkPionsWith4Coordinates(std::vector<std::pair<int, int>> coordinates)
 {
     std::vector <Pion*> blockPions;
@@ -398,11 +332,6 @@ bool Grille::checkPionsWith4Coordinates(std::vector<std::pair<int, int>> coordin
     return this->haveOneCommonCharacteristic(blockPions);
 }
 
-/**
- * says if the coordinates are out of the grid or not
- * @param coordinates
- * @return true if some of the coordinates are out of the grid. false otherwise
- */
 bool Grille::outOfGrid(std::vector<std::pair<int, int>> coordinates)
 {
     for(int i = 0; i < coordinates.size(); i++)
@@ -421,11 +350,6 @@ bool Grille::outOfGrid(std::vector<std::pair<int, int>> coordinates)
     return false;
 }
 
-/**
- *
- * @param offsets array of 8 offsets applicated to 8 coordinates
- * @return true if the pattern is made. False otherwise
- */
 bool Grille::winMotifTetris(int offsets[7])
 {
     for(int i = 0; i < 4; i++)

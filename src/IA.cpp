@@ -6,7 +6,7 @@
 #include "IA.h"
 #include <limits>
 
-void IA::remplirArbre(Grille g, int dept, int deptFin, Pion ** tabPion, Pion * pionDepart = nullptr) {
+void IA::remplirArbre(Grille g, int dept, int deptFin, Pion ** tabPion, Pion * pionDepart) {
     this->grid = g;
     this->children.clear();
 
@@ -85,12 +85,13 @@ int IA::alphaBeta(int & x, int & y, int alpha, int beta, unsigned int tour,
         bestValue = this->grid.heuristicValue();
 
     } else {
-        int tmp_x, tmp_y;
+        int tmp_x = x, tmp_y = y;
         if (maximizingPlayer) {
             bestValue = std::numeric_limits<int>::min();
             for(auto child : children) {
                 tmp_value = child.alphaBeta(x, y, alpha, beta, tour+1, !maximizingPlayer);
                 if (tmp_value > bestValue) {
+                    bestValue = value;
                     tmp_x = x;
                     tmp_y = y;
                 }
@@ -102,6 +103,7 @@ int IA::alphaBeta(int & x, int & y, int alpha, int beta, unsigned int tour,
             for(auto child : children) {
                 tmp_value = child.alphaBeta(x, y, alpha, beta, tour+1, !maximizingPlayer);
                 if (tmp_value < bestValue) {
+                    bestValue = value;
                     tmp_x = x;
                     tmp_y = y;
                 }
@@ -128,7 +130,7 @@ int IA::selectPion(int & indPion, int alpha, int beta, unsigned int tour, bool m
          */
         indPion = this->ind_Pion;
 
-        bestValue = (tour%2 == 0) ? 40 : -40;
+        bestValue = (tour%2 != 0) ? 40 : -40;
 
     } else if (this->grid.full()) {
         /*
@@ -146,22 +148,32 @@ int IA::selectPion(int & indPion, int alpha, int beta, unsigned int tour, bool m
 
         bestValue = this->grid.heuristicValue();
 
-    } else if (maximizingPlayer) {
-        bestValue = std::numeric_limits<int>::min();
-        for(auto child : children) {
-            tmp_value = child.selectPion(indPion, alpha, beta, tour+1, !maximizingPlayer);
-            bestValue = std::max(bestValue, tmp_value);
-            alpha = std::max(alpha, bestValue);
-            if (alpha >= beta) break;
+    } else {
+        int tmp_pion = indPion;
+        if (maximizingPlayer) {
+            bestValue = std::numeric_limits<int>::min();
+            for(auto child : children) {
+                tmp_value = child.selectPion(indPion, alpha, beta, tour+1, !maximizingPlayer);
+                if (tmp_value > bestValue) {
+                    bestValue = tmp_value;
+                    tmp_pion = indPion;
+                }
+                alpha = std::max(alpha, bestValue);
+                if (alpha >= beta) break;
+            }
+        } else {
+            bestValue = std::numeric_limits<int>::max();
+            for(auto child : children) {
+                tmp_value = child.selectPion(indPion, alpha, beta, tour+1, !maximizingPlayer);
+                bestValue = std::min(bestValue, tmp_value);
+                if (tmp_value < bestValue) {
+                    bestValue = tmp_value;
+                    tmp_pion = indPion;
+                }
+                if (alpha >= beta) break;
+            }
         }
-    }else {
-        bestValue = std::numeric_limits<int>::max();
-        for(auto child : children) {
-            tmp_value = child.selectPion(indPion, alpha, beta, tour+1, !maximizingPlayer);
-            bestValue = std::min(bestValue, tmp_value);
-            beta = std::min(beta, bestValue);
-            if (alpha >= beta) break;
-        }
+        indPion = tmp_pion;
     }
 
     this->value = bestValue;
