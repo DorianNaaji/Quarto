@@ -126,19 +126,24 @@ int Grille::heuristicValueHorizontal(unsigned int indice) {
     int value, bestValue = 0;
     std::vector<Pion *> tab;
     bool equals;
-    for (unsigned int j1 = 0; j1 < dimY; ++j1) {
+    for (unsigned int ind1 = 0; ind1 < dimX; ++ind1) {
         tab.clear();
-        tab.push_back(this->getCase(indice, j1).getPion());
-
-        for (unsigned int j2 = j1; j2 < dimY; ++j2) {
-            equals = true;
-            for (auto &k : tab) {
-                equals = k->equals(this->getCase(indice, j2).getPion());
+        if (this->getCase(indice, ind1).getPion() != nullptr) {
+            tab.push_back(this->getCase(indice, ind1).getPion());
+            for (unsigned int ind2 = ind1; ind2 < dimY; ++ind2) {
+                if (this->getCase(indice, ind2).getPion() != nullptr) {
+                    equals = true;
+                    for (auto &k : tab) {
+                        if (k != nullptr) {
+                            equals = k->equals(this->getCase(indice, ind2).getPion());
+                        }
+                    }
+                    if (equals) tab.push_back(this->getCase(indice, ind2).getPion());
+                }
             }
-            if (equals) tab.push_back(this->getCase(indice, j2).getPion());
+            value = (int)tab.size();
+            if (value > bestValue) bestValue = value;
         }
-        value = (int)tab.size();
-        if (value > bestValue) bestValue = value;
     }
 
     return bestValue;
@@ -148,19 +153,24 @@ int Grille::heuristicValueVertical(unsigned int indice) {
     int value, bestValue = 0;
     std::vector<Pion *> tab;
     bool equals;
-    for (unsigned int i1 = 0; i1 < dimY; ++i1) {
+    for (unsigned int ind1 = 0; ind1 < dimX; ++ind1) {
         tab.clear();
-        tab.push_back(this->getCase(i1, indice).getPion());
-
-        for (unsigned int i2 = i1; i2 < dimY; ++i2) {
-            equals = true;
-            for (auto &k : tab) {
-                equals = k->equals(this->getCase(i2, indice).getPion());
+        if (this->getCase(ind1, indice).getPion() != nullptr) {
+            tab.push_back(this->getCase(ind1, 3-ind1).getPion());
+            for (unsigned int ind2 = ind1; ind2 < dimY; ++ind2) {
+                if (this->getCase(ind2, indice).getPion() != nullptr) {
+                    equals = true;
+                    for (auto &k : tab) {
+                        if (k != nullptr) {
+                            equals = k->equals(this->getCase(ind2, indice).getPion());
+                        }
+                    }
+                    if (equals) tab.push_back(this->getCase(ind2, indice).getPion());
+                }
             }
-            if (equals) tab.push_back(this->getCase(i2, indice).getPion());
+            value = (int)tab.size();
+            if (value > bestValue) bestValue = value;
         }
-        value = (int)tab.size();
-        if (value > bestValue) bestValue = value;
     }
 
     return bestValue;
@@ -172,17 +182,22 @@ int Grille::heuristicValueDiagonal() {
     bool equals;
     for (unsigned int ind1 = 0; ind1 < dimX; ++ind1) {
         tab.clear();
-        tab.push_back(this->getCase(ind1, ind1).getPion());
-
-        for (unsigned int ind2 = ind1; ind2 < dimY; ++ind2) {
-            equals = true;
-            for (auto &k : tab) {
-                equals = k->equals(this->getCase(ind2, ind2).getPion());
+        if (this->getCase(ind1, ind1).getPion() != nullptr) {
+            tab.push_back(this->getCase(ind1, 3-ind1).getPion());
+            for (unsigned int ind2 = ind1; ind2 < dimY; ++ind2) {
+                if (this->getCase(ind2, ind2).getPion() != nullptr) {
+                    equals = true;
+                    for (auto &k : tab) {
+                        if (k != nullptr) {
+                            equals = k->equals(this->getCase(ind2, ind2).getPion());
+                        }
+                    }
+                    if (equals) tab.push_back(this->getCase(ind2, ind2).getPion());
+                }
             }
-            if (equals) tab.push_back(this->getCase(ind2, ind2).getPion());
+            value = (int)tab.size();
+            if (value > bestValue) bestValue = value;
         }
-        value = (int)tab.size();
-        if (value > bestValue) bestValue = value;
     }
 
     return bestValue;
@@ -194,17 +209,22 @@ int Grille::heuristicValueAntiDiagonal() {
     bool equals;
     for (unsigned int ind1 = 0; ind1 < dimX; ++ind1) {
         tab.clear();
-        tab.push_back(this->getCase(ind1, 3-ind1).getPion());
-
-        for (unsigned int ind2 = ind1; ind2 < dimY; ++ind2) {
-            equals = true;
-            for (auto &k : tab) {
-                equals = k->equals(this->getCase(ind2, 3-ind2).getPion());
+        if (this->getCase(ind1, 3-ind1).getPion() != nullptr) {
+            tab.push_back(this->getCase(ind1, 3-ind1).getPion());
+            for (unsigned int ind2 = ind1; ind2 < dimY; ++ind2) {
+                if (this->getCase(ind2, 3-ind2).getPion() != nullptr) {
+                    equals = true;
+                    for (auto &k : tab) {
+                        if (k != nullptr) {
+                            equals = k->equals(this->getCase(ind2, 3-ind2).getPion());
+                        }
+                    }
+                    if (equals) tab.push_back(this->getCase(ind2, 3-ind2).getPion());
+                }
             }
-            if (equals) tab.push_back(this->getCase(ind2, 3-ind2).getPion());
+            value = (int)tab.size();
+            if (value > bestValue) bestValue = value;
         }
-        value = (int)tab.size();
-        if (value > bestValue) bestValue = value;
     }
 
     return bestValue;

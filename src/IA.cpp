@@ -23,7 +23,7 @@ void IA::remplirArbre(Grille g, int dept, int deptFin, Pion ** tabPion, Pion * p
                         child->ind_x = i;
                         child->ind_y = j;
                         for (unsigned int k = 0; k < 16; ++k) {
-                            if (tabPion[k]->equals(pionDepart)) {
+                            if (tabPion[k] != nullptr && tabPion[k]->equals(pionDepart)) {
                                 child->ind_Pion = k;
                                 tabPion[k] = nullptr;
                                 child->remplirArbre(tmp, dept+1, deptFin, tabPion);
@@ -91,7 +91,7 @@ int IA::alphaBeta(int & x, int & y, int alpha, int beta, unsigned int tour,
             for(auto child : children) {
                 tmp_value = child.alphaBeta(x, y, alpha, beta, tour+1, !maximizingPlayer);
                 if (tmp_value > bestValue) {
-                    bestValue = value;
+                    bestValue = tmp_value;
                     tmp_x = x;
                     tmp_y = y;
                 }
@@ -103,7 +103,7 @@ int IA::alphaBeta(int & x, int & y, int alpha, int beta, unsigned int tour,
             for(auto child : children) {
                 tmp_value = child.alphaBeta(x, y, alpha, beta, tour+1, !maximizingPlayer);
                 if (tmp_value < bestValue) {
-                    bestValue = value;
+                    bestValue = tmp_value;
                     tmp_x = x;
                     tmp_y = y;
                 }
@@ -115,9 +115,7 @@ int IA::alphaBeta(int & x, int & y, int alpha, int beta, unsigned int tour,
         y = tmp_y;
     }
 
-    this->value = bestValue;
-
-    return this->value;
+    return bestValue;
 }
 
 int IA::selectPion(int & indPion, int alpha, int beta, unsigned int tour, bool maximizingPlayer) {
@@ -143,7 +141,6 @@ int IA::selectPion(int & indPion, int alpha, int beta, unsigned int tour, bool m
         /*
          * Cas où on est sur une feuille
          */
-        indPion = this->ind_Pion;
         indPion = this->ind_Pion;
 
         bestValue = this->grid.heuristicValue();
@@ -176,7 +173,5 @@ int IA::selectPion(int & indPion, int alpha, int beta, unsigned int tour, bool m
         indPion = tmp_pion;
     }
 
-    this->value = bestValue;
-
-    return this->value;
+    return bestValue;
 }

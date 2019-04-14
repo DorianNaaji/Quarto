@@ -86,7 +86,8 @@ void Jeu::choixPieces(bool pvp)
 {
     // creating the window
     unsigned int width = 1350, length = 800;
-    sf::RenderWindow window(sf::VideoMode(width, length), "Choix des regles | Quarto", sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(width, length), "Choix des regles | Quarto",
+            sf::Style::Titlebar | sf::Style::Close);
 
     //loading some fonts
     sf::Font titleFont, modeFont;
@@ -202,8 +203,6 @@ void Jeu::choixPieces(bool pvp)
                     // tetris mode
                     else
                     {
-                        //std::cout << "x : " << sf::Mouse::getPosition(window).x << ", y : " << sf::Mouse::getPosition(window).y << std::endl;
-                        // iterating through or shapes
                         for(int i = 0; i < 7; i++)
                         {
                             // current shape
@@ -288,7 +287,8 @@ void Jeu::menu() {
     this->_motif = NONE;
     unsigned int largeur = 1350, hauteur = 800;
     // création de la fenêtre
-    sf::RenderWindow window(sf::VideoMode(largeur, hauteur), "Mode de Jeu | Quarto", sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(largeur, hauteur), "Mode de Jeu | Quarto",
+            sf::Style::Titlebar | sf::Style::Close);
 
     //Initialisation de la font
     sf::Font font_titre, font_mode;
@@ -577,9 +577,11 @@ void Jeu::pvp() {
         //rect.setFillColor(sf::Color::Magenta);
 
         // we load the texture
-        if (!tetrisTexture->loadFromFile("../images/" + std::to_string(this->_motif) + ".png", sf::IntRect(0, 0, 200, 150)))
+        if (!tetrisTexture->loadFromFile("../images/" + std::to_string(this->_motif) + ".png",
+                sf::IntRect(0, 0, 200, 150)))
         {
-            tetrisTexture->loadFromFile("./images/" + std::to_string(this->_motif) + ".png", sf::IntRect(0, 0, 200, 150));
+            tetrisTexture->loadFromFile("./images/" + std::to_string(this->_motif) + ".png",
+                    sf::IntRect(0, 0, 200, 150));
         }
         // we smooth the texture
         tetrisTexture->setSmooth(true);
@@ -610,12 +612,15 @@ void Jeu::pvp() {
 
                 case sf::Event::MouseButtonPressed:
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && ind_pion == -1) {
-                        ind_pion = this->selectPion(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, openGrille);
+                        ind_pion = this->selectPion(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y,
+                                openGrille);
                     } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                        this->selectCaseGrille(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, ind_x, ind_y);
+                        this->selectCaseGrille(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y,
+                                ind_x, ind_y);
 
                         if (ind_pion != -1 && ind_y != -1) {
-                            this->g->setCase(static_cast<unsigned int>(ind_x), static_cast<unsigned int>(ind_y), & *this->tabPion[ind_pion]);
+                            this->g->setCase(static_cast<unsigned int>(ind_x), static_cast<unsigned int>(ind_y),
+                                    this->tabPion[ind_pion]);
                             grille[ind_y*4+ind_x].setTexture(openGrille[ind_pion].getTexture());
                             openGrille[ind_pion].setTexture(nullptr);
                             openGrille[ind_pion].setOutlineColor(sf::Color::Transparent);
@@ -774,7 +779,8 @@ void Jeu::IA_alpha_beta() {
                             ia->remplirArbre(*g, 0, 3, tabPion, tabPion[ind_pion]);
                             std::cout<<"Creation arbre... ok!"<<std::endl;
                             std::cout<<"Selection case..."<<std::endl;
-                            ia->alphaBeta(ind_x, ind_y, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour, true);
+                            ia->alphaBeta(ind_x, ind_y, std::numeric_limits<int>::min(),
+                                    std::numeric_limits<int>::max(), tour, true);
                             std::cout<<"Selection case... ok!"<<std::endl;
                             std::cout<<ind_x<<" | "<<ind_y<<std::endl;
                             std::cout<<"Placement Pion..."<<std::endl;
@@ -789,22 +795,8 @@ void Jeu::IA_alpha_beta() {
                             std::cout<<"Suppresion Bordure... ok!"<<std::endl;
                             std::cout<<"Placement Pion... ok!"<<std::endl;
 
-                            /*
-                             * Select pion
-                             */
-                            ia->selectPion(ind_pion, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), tour, false);
-
-                            while (openGrille[ind_pion].getTexture() == nullptr && ind_pion < 16) {
-                                ind_pion++;
-                            }
-
-                            openGrille[ind_pion].setOutlineColor(sf::Color::Red);
-
-                            ind_x = -1;
-                            ind_y = -1;
                             tour++;
 
-                            //gestion des conditions de victoire
                             if(this->g->win(this->_motif)) {
                                 window.close();
                                 this->resultat(joueur);
@@ -812,6 +804,23 @@ void Jeu::IA_alpha_beta() {
                                 window.close();
                                 this->resultat("match nul");
                             }
+
+                            /*
+                             * Select pion
+                             */
+                            ia->remplirArbre(*g, 0, 3, tabPion, tabPion[ind_pion]);
+                            ia->selectPion(ind_pion, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(),
+                                    tour, false);
+
+                            while (this->tabPion[ind_pion] == nullptr) {
+                                ind_pion++;
+                                if (ind_pion == 16) ind_pion = 0;
+                            }
+
+                            openGrille[ind_pion].setOutlineColor(sf::Color::Red);
+
+                            ind_x = -1;
+                            ind_y = -1;
                         }
                     } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                         this->selectCaseGrille(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y,

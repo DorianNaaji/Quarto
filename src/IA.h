@@ -26,11 +26,6 @@ private:
     std::vector<IA> children;
 
     /**
-     * @brief valeur de la situation
-     */
-    int value;
-
-    /**
      * @brief coordonnées X et Y de la case et indice du pion
      */
     unsigned int ind_x, ind_y, ind_Pion;
