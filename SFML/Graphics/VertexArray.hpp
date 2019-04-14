@@ -28,11 +28,11 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Graphics/Export.hpp>
-#include <SFML/Graphics/Vertex.hpp>
-#include <SFML/Graphics/PrimitiveType.hpp>
-#include <SFML/Graphics/Rect.hpp>
-#include <SFML/Graphics/Drawable.hpp>
+#include "Export.hpp"
+#include "Vertex.hpp"
+#include "PrimitiveType.hpp"
+#include "Rect.hpp"
+#include "Drawable.hpp"
 #include <vector>
 
 

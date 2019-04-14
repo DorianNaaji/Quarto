@@ -28,16 +28,16 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Graphics/Export.hpp>
-#include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/Rect.hpp>
-#include <SFML/Graphics/View.hpp>
-#include <SFML/Graphics/Transform.hpp>
-#include <SFML/Graphics/BlendMode.hpp>
-#include <SFML/Graphics/RenderStates.hpp>
-#include <SFML/Graphics/PrimitiveType.hpp>
-#include <SFML/Graphics/Vertex.hpp>
-#include <SFML/System/NonCopyable.hpp>
+#include "Export.hpp"
+#include "Color.hpp"
+#include "Rect.hpp"
+#include "View.hpp"
+#include "Transform.hpp"
+#include "BlendMode.hpp"
+#include "RenderStates.hpp"
+#include "PrimitiveType.hpp"
+#include "Vertex.hpp"
+#include "../System/NonCopyable.hpp"
 
 
 namespace sf

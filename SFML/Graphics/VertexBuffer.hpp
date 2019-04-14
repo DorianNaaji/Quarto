@@ -28,10 +28,10 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Graphics/Export.hpp>
-#include <SFML/Graphics/PrimitiveType.hpp>
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Window/GlResource.hpp>
+#include "Export.hpp"
+#include "PrimitiveType.hpp"
+#include "Drawable.hpp"
+#include "../Window/GlResource.hpp"
 
 
 namespace sf
