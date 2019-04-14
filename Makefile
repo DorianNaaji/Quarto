@@ -4,9 +4,17 @@ GGDB 		= -Wall -ggdb
 
 paramC 		= -std=c++11 -Wall -c
 
-libDir 		= -I./SFML/
+ifeq ($(OS),Windows_NT)
 
+libDir		= -L./libs/windows/lib
+libFlags 	= -lsfml-graphics -lsfml-window -lsfml-system
+
+else
+
+libDir 		= -I./SFML/
 libFlags	= -lsfml-graphics -lsfml-window -lsfml-system
+
+endif
 
 OBJ			= 	obj/Pion.o \
 				obj/Case.o \
