@@ -3,7 +3,7 @@
 //
 
 #include "Jeu.h"
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include "../SFML/Graphics.hpp"
 #include "IA.h"
@@ -91,14 +91,8 @@ void Jeu::choixPieces(bool pvp)
 
     //loading some fonts
     sf::Font titleFont, modeFont;
-    if (!titleFont.loadFromFile("./fonts/PermanentMarker-regular.ttf"))
-    {
-        titleFont.loadFromFile("../fonts/PermanentMarker-regular.ttf");
-    }
-    if (!modeFont.loadFromFile("./fonts/Ubuntu-regular.ttf"))
-    {
-        modeFont.loadFromFile("../fonts/Ubuntu-regular.ttf");
-    }
+    titleFont.loadFromFile("./fonts/PermanentMarker-regular.ttf");
+    modeFont.loadFromFile("./fonts/Ubuntu-regular.ttf");
 
     // title text
     sf::Text title;
@@ -143,10 +137,8 @@ void Jeu::choixPieces(bool pvp)
         //rect.setOutlineColor(sf::Color::Red);
 
         // we load the texture
-        if (!texture->loadFromFile("../images/" + std::to_string(i) + ".png", sf::IntRect(0, 0, 200, 150)))
-        {
-            texture->loadFromFile("./images/" + std::to_string(i) + ".png", sf::IntRect(0, 0, 200, 150));
-        }
+        texture->loadFromFile("./images/" + std::to_string(i) + ".png", sf::IntRect(0, 0, 200, 150));
+
         // we smooth the texture
         texture->setSmooth(true);
 
@@ -292,11 +284,8 @@ void Jeu::menu() {
 
     //Initialisation de la font
     sf::Font font_titre, font_mode;
-    if (!font_titre.loadFromFile("./fonts/PermanentMarker-regular.ttf"))
-        font_titre.loadFromFile("../fonts/PermanentMarker-regular.ttf");
-    if (!font_mode.loadFromFile("./fonts/Ubuntu-regular.ttf"))
-        font_mode.loadFromFile("../fonts/Ubuntu-regular.ttf");
-
+    font_titre.loadFromFile("./fonts/PermanentMarker-regular.ttf");
+    font_mode.loadFromFile("./fonts/Ubuntu-regular.ttf");
     //Création du texte
     sf::Text name;
     name.setFont(font_titre);
@@ -420,10 +409,8 @@ void Jeu::resultat(const std::string & message) {
 
     //Initialisation de la font
     sf::Font font_titre, font_mode;
-    if (!font_titre.loadFromFile("./fonts/PermanentMarker-regular.ttf"))
-        font_titre.loadFromFile("../fonts/PermanentMarker-regular.ttf");
-    if (!font_mode.loadFromFile("./fonts/Ubuntu-regular.ttf"))
-        font_mode.loadFromFile("../fonts/Ubuntu-regular.ttf");
+    font_titre.loadFromFile("./fonts/PermanentMarker-regular.ttf");
+    font_mode.loadFromFile("./fonts/Ubuntu-regular.ttf");
 
     //Création du texte
     sf::Text titre;
@@ -518,8 +505,7 @@ void Jeu::pvp() {
     // création texte explicatif
     sf::Text text;
     sf::Font font;
-    if (!font.loadFromFile("../fonts/Ubuntu-Regular.ttf"))
-        font.loadFromFile("./fonts/Ubuntu-Regular.ttf");
+    font.loadFromFile("./fonts/Ubuntu-Regular.ttf");
     text.setFont(font);
     text.setFillColor(sf::Color::Black);
     text.setCharacterSize(50);
@@ -555,8 +541,7 @@ void Jeu::pvp() {
         rect.setOutlineThickness(5.f);
         rect.setOutlineColor(sf::Color::Transparent);
 
-        if (!texture->loadFromFile("../images/"+this->tabPion[i]->getLien_image(), sf::IntRect(0, 0, 400, 400)))
-            texture->loadFromFile("./images/"+this->tabPion[i]->getLien_image(), sf::IntRect(0, 0, 400, 400));
+        texture->loadFromFile("./images/"+this->tabPion[i]->getLien_image(), sf::IntRect(0, 0, 400, 400));
 
         texture->setSmooth(true);
 
@@ -577,12 +562,8 @@ void Jeu::pvp() {
         //rect.setFillColor(sf::Color::Magenta);
 
         // we load the texture
-        if (!tetrisTexture->loadFromFile("../images/" + std::to_string(this->_motif) + ".png",
-                sf::IntRect(0, 0, 200, 150)))
-        {
-            tetrisTexture->loadFromFile("./images/" + std::to_string(this->_motif) + ".png",
+        tetrisTexture->loadFromFile("./images/" + std::to_string(this->_motif) + ".png",
                     sf::IntRect(0, 0, 200, 150));
-        }
         // we smooth the texture
         tetrisTexture->setSmooth(true);
         // we set the texture to the rectangle
@@ -707,8 +688,7 @@ void Jeu::IA_alpha_beta() {
     // création texte explicatif
     sf::Text text;
     sf::Font font;
-    if (!font.loadFromFile("../fonts/Ubuntu-Regular.ttf"))
-        font.loadFromFile("./fonts/Ubuntu-Regular.ttf");
+    font.loadFromFile("./fonts/Ubuntu-Regular.ttf");
     text.setFont(font);
     text.setFillColor(sf::Color::Black);
     text.setCharacterSize(50);
@@ -737,8 +717,7 @@ void Jeu::IA_alpha_beta() {
         rect.setOutlineThickness(5.f);
         rect.setOutlineColor(sf::Color::Transparent);
 
-        if (!texture->loadFromFile("../images/"+this->tabPion[i]->getLien_image(), sf::IntRect(0, 0, 400, 400)))
-            texture->loadFromFile("./images/"+this->tabPion[i]->getLien_image(), sf::IntRect(0, 0, 400, 400));
+        texture->loadFromFile("./images/"+this->tabPion[i]->getLien_image(), sf::IntRect(0, 0, 400, 400));
 
         texture->setSmooth(true);
 
@@ -774,26 +753,15 @@ void Jeu::IA_alpha_beta() {
 
                         if (tour%2 == 1) {
                             IA child;
-
-                            std::cout<<"Creation arbre..."<<std::endl;
                             ia->remplirArbre(*g, 0, 3, tabPion, tabPion[ind_pion]);
-                            std::cout<<"Creation arbre... ok!"<<std::endl;
-                            std::cout<<"Selection case..."<<std::endl;
                             ia->alphaBeta(ind_x, ind_y, std::numeric_limits<int>::min(),
                                     std::numeric_limits<int>::max(), tour, true);
-                            std::cout<<"Selection case... ok!"<<std::endl;
-                            std::cout<<ind_x<<" | "<<ind_y<<std::endl;
-                            std::cout<<"Placement Pion..."<<std::endl;
                             this->g->setCase(static_cast<unsigned int>(ind_x), static_cast<unsigned int>(ind_y),
                                              & *this->tabPion[ind_pion]);
                             grille[ind_y*4+ind_x].setTexture(openGrille[ind_pion].getTexture());
-                            std::cout<<"Placement Texture... ok!"<<std::endl;
                             this->tabPion[ind_pion] = nullptr;
                             openGrille[ind_pion].setTexture(nullptr);
-                            std::cout<<"Suppresion Texture... ok!"<<std::endl;
                             openGrille[ind_pion].setOutlineColor(sf::Color::Transparent);
-                            std::cout<<"Suppresion Bordure... ok!"<<std::endl;
-                            std::cout<<"Placement Pion... ok!"<<std::endl;
 
                             tour++;
 
@@ -808,7 +776,7 @@ void Jeu::IA_alpha_beta() {
                             /*
                              * Select pion
                              */
-                            ia->remplirArbre(*g, 0, 3, tabPion, tabPion[ind_pion]);
+                            ia->remplirArbre(*g, 0, 2, tabPion, tabPion[ind_pion]);
                             ia->selectPion(ind_pion, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(),
                                     tour, false);
 

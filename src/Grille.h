@@ -183,7 +183,7 @@ public:
      * @param [in] coordinates a vector of pairs of ints.
      * @return true if 4 given pions (according to their coordinates) have a common characteristics. False otherwise
      */
-    bool checkPionsWith4Coordinates(std::vector<std::pair<int, int>> coordinates);
+    bool checkPionsWith4Coordinates(const std::vector<std::pair<int, int>>& coordinates);
 
     /**
      * @param [in] offsets array of 8 offsets applicated to 8 coordinates
@@ -196,7 +196,7 @@ public:
      * @param coordinates a vector of pairs of ints.
      * @return true if some of the coordinates are out of the grid. false otherwise
      */
-    bool outOfGrid(std::vector<std::pair<int, int>> coordinates);
+    bool outOfGrid(const std::vector<std::pair<int, int>>& coordinates);
 };
 
 

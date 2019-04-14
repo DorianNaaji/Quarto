@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Grille.h"
-#include <assert.h>
+#include <cassert>
 #include <vector>
 
 
@@ -342,26 +342,26 @@ bool Grille::biais_inverseWin()
     return ( (this->winMotifTetris(offsets1)) || (this->winMotifTetris(offsets2)) );
 }
 
-bool Grille::checkPionsWith4Coordinates(std::vector<std::pair<int, int>> coordinates)
+bool Grille::checkPionsWith4Coordinates(const std::vector<std::pair<int, int>>& coordinates)
 {
     std::vector <Pion*> blockPions;
-    for(unsigned int i = 0; i < coordinates.size(); i++)
-    {
-        blockPions.push_back(this->getCase(coordinates.at(i).first, coordinates.at(i).second).getPion());
+    blockPions.reserve(coordinates.size());
+    for(auto & coordinate : coordinates) {
+        blockPions.push_back(this->getCase(coordinate.first, coordinate.second).getPion());
     }
     return this->haveOneCommonCharacteristic(blockPions);
 }
 
-bool Grille::outOfGrid(std::vector<std::pair<int, int>> coordinates)
+bool Grille::outOfGrid(const std::vector<std::pair<int, int>>& coordinates)
 {
-    for(unsigned int i = 0; i < coordinates.size(); i++)
+    for(auto & coordinate : coordinates)
     {
         if
         (
-                (coordinates.at(i).first < 0)
-            ||  (coordinates.at(i).first > 3)
-            ||  (coordinates.at(i).second < 0)
-            ||  (coordinates.at(i).second > 3)
+                (coordinate.first < 0)
+            ||  (coordinate.first > 3)
+            ||  (coordinate.second < 0)
+            ||  (coordinate.second > 3)
         )
         {
             return true;

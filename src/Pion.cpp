@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "Pion.h"
-#include "assert.h"
+#include <cassert>
 
 Pion::Pion() {
     this->couleur = false;

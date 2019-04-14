@@ -65,7 +65,7 @@ int IA::alphaBeta(int & x, int & y, int alpha, int beta, unsigned int tour,
         x = this->ind_x;
         y = this->ind_y;
 
-        bestValue = (tour%2 == 0) ? 40 : -40;
+        bestValue = (tour%2 != 0) ? 40 : -40;
 
     } else if (this->grid.full()) {
         /*
@@ -83,6 +83,8 @@ int IA::alphaBeta(int & x, int & y, int alpha, int beta, unsigned int tour,
         y = this->ind_y;
 
         bestValue = this->grid.heuristicValue();
+
+        if (tour%2 == 0) bestValue *= (-1);
 
     } else {
         int tmp_x = x, tmp_y = y;
@@ -145,6 +147,8 @@ int IA::selectPion(int & indPion, int alpha, int beta, unsigned int tour, bool m
 
         bestValue = this->grid.heuristicValue();
 
+        if (tour%2 == 0) bestValue *= (-1);
+
     } else {
         int tmp_pion = indPion;
         if (maximizingPlayer) {
@@ -162,7 +166,6 @@ int IA::selectPion(int & indPion, int alpha, int beta, unsigned int tour, bool m
             bestValue = std::numeric_limits<int>::max();
             for(auto child : children) {
                 tmp_value = child.selectPion(indPion, alpha, beta, tour+1, !maximizingPlayer);
-                bestValue = std::min(bestValue, tmp_value);
                 if (tmp_value < bestValue) {
                     bestValue = tmp_value;
                     tmp_pion = indPion;
