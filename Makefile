@@ -4,7 +4,7 @@ GGDB 		= -Wall -ggdb
 
 paramC 		= -std=c++11 -Wall -c
 
-libDir 		= -L./SFML/
+libDir 		= -I./SFML/
 
 libFlags	= -lsfml-graphics -lsfml-window -lsfml-system
 
@@ -39,6 +39,6 @@ clean:
 	rm obj/*.o
 
 veryclean:
-	rm bin/*
+	rm bin/quarto
 	make clean
 endif
