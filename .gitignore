@@ -7,8 +7,6 @@ lib/
 cmake_modules/
 # CMake
 CMakeLists.txt
-# Librairies
-libs/
 # Fichiers inutile
 .DS_Store
 # Compilation

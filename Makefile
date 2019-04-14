@@ -2,7 +2,7 @@ EXEC = bin/quarto
 
 GGDB = -Wall -ggdb
 paramC = -std=c++11 -Wall -c
-libFlags = -L./SFML/ -lsfml-graphics -lsfml-window -lsfml-system
+libFlags = -L./libs/windows/lib -lsfml-graphics -lsfml-window -lsfml-system
 OBJ = 	obj/Pion.o \
 		obj/Case.o \
 		obj/Grille.o \
