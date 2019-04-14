@@ -345,7 +345,7 @@ bool Grille::biais_inverseWin()
 bool Grille::checkPionsWith4Coordinates(std::vector<std::pair<int, int>> coordinates)
 {
     std::vector <Pion*> blockPions;
-    for(int i = 0; i < coordinates.size(); i++)
+    for(unsigned int i = 0; i < coordinates.size(); i++)
     {
         blockPions.push_back(this->getCase(coordinates.at(i).first, coordinates.at(i).second).getPion());
     }
@@ -354,7 +354,7 @@ bool Grille::checkPionsWith4Coordinates(std::vector<std::pair<int, int>> coordin
 
 bool Grille::outOfGrid(std::vector<std::pair<int, int>> coordinates)
 {
-    for(int i = 0; i < coordinates.size(); i++)
+    for(unsigned int i = 0; i < coordinates.size(); i++)
     {
         if
         (
