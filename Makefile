@@ -9,7 +9,7 @@ OBJ = 	obj/Pion.o \
 		obj/IA.o \
 		obj/Jeu.o
 
-HEADER= src/Pion.h src/Case.h src/Grille.h src/IA.h
+HEADER= src/Pion.h src/Case.h src/Grille.h src/IA.h src/Motif.h
 
 all: $(EXEC)
 
