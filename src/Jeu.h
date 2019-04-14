@@ -10,7 +10,7 @@
 
 
 #include <vector>
-#include <SFML/Graphics/RectangleShape.hpp>
+#include "../SFML/Graphics/RectangleShape.hpp"
 #include "Grille.h"
 #include "IA.h"
 

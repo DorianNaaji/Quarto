@@ -5,7 +5,7 @@
 #include "Jeu.h"
 #include <math.h>
 #include <iostream>
-#include <SFML/Graphics.hpp>
+#include "../SFML/Graphics.hpp"
 #include "IA.h"
 
 /**

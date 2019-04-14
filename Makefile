@@ -2,7 +2,7 @@ EXEC = bin/quarto
 
 GGDB = -Wall -ggdb
 paramC = -std=c++11 -Wall -c
-libFlags = -LSFML -lsfml-graphics -lsfml-window -lsfml-system
+libFlags = -L./SFML/ -lsfml-graphics -lsfml-window -lsfml-system
 OBJ = 	obj/Pion.o \
 		obj/Case.o \
 		obj/Grille.o \
@@ -17,7 +17,7 @@ bin/quarto: main.cpp $(OBJ)
 	g++ -std=c++11 $(GGBD) main.cpp $(OBJ) -o bin/quarto $(libFlags)
 
 obj/%.o: src/%.cpp $(HEADER)
-	g++ $(paramC) $< -o $@
+	g++ $(paramC) $< -o $@ -I./SFML
 
 ifeq ($(OS),Windows_NT)
 clean:
